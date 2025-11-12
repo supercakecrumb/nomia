@@ -22,7 +22,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags="-w -s" -o 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags="-w -s" -o /build/migrate ./cmd/migrate
 
 # API stage
-FROM alpine:3.19 AS api
+FROM alpine:3.22 AS api
 
 # Install runtime dependencies
 RUN apk add --no-cache ca-certificates tzdata
@@ -57,7 +57,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 CMD ["/app/api"]
 
 # Worker stage
-FROM alpine:3.19 AS worker
+FROM alpine:3.22 AS worker
 
 # Install runtime dependencies
 RUN apk add --no-cache ca-certificates tzdata
@@ -85,7 +85,7 @@ USER appuser
 CMD ["/app/worker"]
 
 # Migrate stage
-FROM alpine:3.19 AS migrate
+FROM alpine:3.22 AS migrate
 
 # Install runtime dependencies
 RUN apk add --no-cache ca-certificates tzdata
