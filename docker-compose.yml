@@ -1,0 +1,130 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: affirm-name-postgres
+    environment:
+      POSTGRES_DB: affirm_name
+      POSTGRES_USER: affirm_user
+      POSTGRES_PASSWORD: affirm_password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=en_US.UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U affirm_user -d affirm_name"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - affirm-network
+    restart: unless-stopped
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrate
+    container_name: affirm-name-migrate
+    environment:
+      DATABASE_URL: postgres://affirm_user:affirm_password@postgres:5432/affirm_name?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - affirm-network
+    restart: on-failure
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api
+    container_name: affirm-name-api
+    environment:
+      # Database
+      DATABASE_URL: postgres://affirm_user:affirm_password@postgres:5432/affirm_name?sslmode=disable
+      DATABASE_MAX_CONNECTIONS: 100
+      DATABASE_MAX_IDLE: 10
+      DATABASE_CONN_MAX_LIFETIME: 1h
+      DATABASE_CONN_MAX_IDLE_TIME: 10m
+      
+      # Storage
+      STORAGE_TYPE: local
+      STORAGE_PATH: /app/uploads
+      
+      # Server
+      SERVER_PORT: 8080
+      SERVER_READ_TIMEOUT: 30s
+      SERVER_WRITE_TIMEOUT: 30s
+      SERVER_IDLE_TIMEOUT: 120s
+      
+      # Logging
+      LOG_LEVEL: info
+      LOG_FORMAT: json
+    ports:
+      - "8080:8080"
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    networks:
+      - affirm-network
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: worker
+    container_name: affirm-name-worker
+    environment:
+      # Database
+      DATABASE_URL: postgres://affirm_user:affirm_password@postgres:5432/affirm_name?sslmode=disable
+      DATABASE_MAX_CONNECTIONS: 50
+      DATABASE_MAX_IDLE: 5
+      DATABASE_CONN_MAX_LIFETIME: 1h
+      DATABASE_CONN_MAX_IDLE_TIME: 10m
+      
+      # Storage
+      STORAGE_TYPE: local
+      STORAGE_PATH: /app/uploads
+      
+      # Worker
+      WORKER_CONCURRENCY: 4
+      WORKER_POLL_INTERVAL: 5s
+      WORKER_MAX_RETRIES: 3
+      
+      # Logging
+      LOG_LEVEL: info
+      LOG_FORMAT: json
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    networks:
+      - affirm-network
+    restart: unless-stopped
+
+networks:
+  affirm-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  uploads_data:
+    driver: local

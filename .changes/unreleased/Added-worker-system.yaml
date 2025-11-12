@@ -1,0 +1,6 @@
+kind: Added
+body: Background worker system for async job processing with configurable pool size
+time: 2025-11-12T15:10:00Z
+custom:
+  Author: system
+  Issue: ""

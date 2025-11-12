@@ -1,0 +1,6 @@
+kind: Added
+body: Initial implementation of name data API with PostgreSQL backend
+time: 2025-11-12T15:00:00Z
+custom:
+  Author: system
+  Issue: ""

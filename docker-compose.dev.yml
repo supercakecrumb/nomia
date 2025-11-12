@@ -1,0 +1,153 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: affirm-name-postgres-dev
+    environment:
+      POSTGRES_DB: affirm_name_dev
+      POSTGRES_USER: affirm_user
+      POSTGRES_PASSWORD: affirm_password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=en_US.UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U affirm_user -d affirm_name_dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    networks:
+      - affirm-network-dev
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: affirm-name-pgadmin-dev
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@affirm-name.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_dev_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - affirm-network-dev
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrate
+    container_name: affirm-name-migrate-dev
+    environment:
+      DATABASE_URL: postgres://affirm_user:affirm_password@postgres:5432/affirm_name_dev?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - affirm-network-dev
+    restart: on-failure
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api
+    container_name: affirm-name-api-dev
+    environment:
+      # Database
+      DATABASE_URL: postgres://affirm_user:affirm_password@postgres:5432/affirm_name_dev?sslmode=disable
+      DATABASE_MAX_CONNECTIONS: 50
+      DATABASE_MAX_IDLE: 5
+      DATABASE_CONN_MAX_LIFETIME: 1h
+      DATABASE_CONN_MAX_IDLE_TIME: 10m
+      
+      # Storage
+      STORAGE_TYPE: local
+      STORAGE_PATH: /app/uploads
+      
+      # Server
+      SERVER_PORT: 8080
+      SERVER_READ_TIMEOUT: 30s
+      SERVER_WRITE_TIMEOUT: 30s
+      SERVER_IDLE_TIMEOUT: 120s
+      
+      # Logging (verbose for development)
+      LOG_LEVEL: debug
+      LOG_FORMAT: text
+    ports:
+      - "8080:8080"
+    volumes:
+      # Mount source code for hot reload (if using air or similar)
+      - ./uploads:/app/uploads
+      # Mount migrations for easy updates
+      - ./migrations:/app/migrations:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    networks:
+      - affirm-network-dev
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: worker
+    container_name: affirm-name-worker-dev
+    environment:
+      # Database
+      DATABASE_URL: postgres://affirm_user:affirm_password@postgres:5432/affirm_name_dev?sslmode=disable
+      DATABASE_MAX_CONNECTIONS: 25
+      DATABASE_MAX_IDLE: 3
+      DATABASE_CONN_MAX_LIFETIME: 1h
+      DATABASE_CONN_MAX_IDLE_TIME: 10m
+      
+      # Storage
+      STORAGE_TYPE: local
+      STORAGE_PATH: /app/uploads
+      
+      # Worker (reduced concurrency for dev)
+      WORKER_CONCURRENCY: 2
+      WORKER_POLL_INTERVAL: 3s
+      WORKER_MAX_RETRIES: 3
+      
+      # Logging (verbose for development)
+      LOG_LEVEL: debug
+      LOG_FORMAT: text
+    volumes:
+      # Mount uploads directory
+      - ./uploads:/app/uploads
+      # Mount migrations for reference
+      - ./migrations:/app/migrations:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    networks:
+      - affirm-network-dev
+    restart: unless-stopped
+
+networks:
+  affirm-network-dev:
+    driver: bridge
+
+volumes:
+  postgres_dev_data:
+    driver: local
+  pgadmin_dev_data:
+    driver: local

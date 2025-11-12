@@ -1,0 +1,6 @@
+kind: Fixed
+body: Fix name validation to properly handle Unicode characters and special cases
+time: 2025-11-12T15:20:00Z
+custom:
+  Author: system
+  Issue: ""
