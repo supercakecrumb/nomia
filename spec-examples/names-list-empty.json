@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "page": 1,
+    "page_size": 50,
+    "total_count": 0,
+    "total_pages": 0,
+    "db_start": 1880,
+    "db_end": 2023,
+    "popularity_summary": {
+      "population_total": 0,
+      "active_driver": null,
+      "active_value": null,
+      "derived_min_count": 0,
+      "derived_top_n": 0,
+      "derived_coverage_percent": 0
+    }
+  },
+  "names": []
+}

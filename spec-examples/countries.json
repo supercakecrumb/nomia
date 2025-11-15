@@ -1,0 +1,28 @@
+{
+  "countries": [
+    {
+      "code": "US",
+      "name": "United States",
+      "data_source_name": "Social Security Administration",
+      "data_source_url": "https://www.ssa.gov/oact/babynames/",
+      "data_source_description": "Annual baby name data from SSA records since 1880. Includes names with at least 5 occurrences per year.",
+      "data_source_requires_manual_download": true
+    },
+    {
+      "code": "UK",
+      "name": "United Kingdom",
+      "data_source_name": "Office for National Statistics",
+      "data_source_url": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/livebirths",
+      "data_source_description": "Baby names data for England and Wales.",
+      "data_source_requires_manual_download": true
+    },
+    {
+      "code": "SE",
+      "name": "Sweden",
+      "data_source_name": "Statistics Sweden",
+      "data_source_url": "https://www.scb.se/",
+      "data_source_description": null,
+      "data_source_requires_manual_download": true
+    }
+  ]
+}

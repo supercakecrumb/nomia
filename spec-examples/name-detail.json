@@ -1,0 +1,153 @@
+{
+  "name": "Alex",
+  "meta": {
+    "db_start": 1880,
+    "db_end": 2023
+  },
+  "summary": {
+    "total_count": 125430,
+    "female_count": 62715,
+    "male_count": 62715,
+    "unknown_count": 0,
+    "gender_balance": 50.0,
+    "has_unknown_data": false,
+    "name_start": 1920,
+    "name_end": 2023,
+    "countries": ["US", "UK", "SE"]
+  },
+  "time_series": [
+    {
+      "year": 1920,
+      "total_count": 450,
+      "female_count": 200,
+      "male_count": 250,
+      "unknown_count": 0,
+      "gender_balance": 55.6
+    },
+    {
+      "year": 1921,
+      "total_count": 480,
+      "female_count": 240,
+      "male_count": 240,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    },
+    {
+      "year": 1930,
+      "total_count": 520,
+      "female_count": 260,
+      "male_count": 260,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    },
+    {
+      "year": 1940,
+      "total_count": 580,
+      "female_count": 290,
+      "male_count": 290,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    },
+    {
+      "year": 1950,
+      "total_count": 720,
+      "female_count": 360,
+      "male_count": 360,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    },
+    {
+      "year": 1960,
+      "total_count": 950,
+      "female_count": 475,
+      "male_count": 475,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    },
+    {
+      "year": 1970,
+      "total_count": 1250,
+      "female_count": 625,
+      "male_count": 625,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    },
+    {
+      "year": 1980,
+      "total_count": 1800,
+      "female_count": 900,
+      "male_count": 900,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    },
+    {
+      "year": 1990,
+      "total_count": 2500,
+      "female_count": 1250,
+      "male_count": 1250,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    },
+    {
+      "year": 2000,
+      "total_count": 3200,
+      "female_count": 1600,
+      "male_count": 1600,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    },
+    {
+      "year": 2010,
+      "total_count": 3800,
+      "female_count": 1900,
+      "male_count": 1900,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    },
+    {
+      "year": 2020,
+      "total_count": 4100,
+      "female_count": 2050,
+      "male_count": 2050,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    },
+    {
+      "year": 2023,
+      "total_count": 4200,
+      "female_count": 2100,
+      "male_count": 2100,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    }
+  ],
+  "by_country": [
+    {
+      "country_code": "US",
+      "country_name": "United States",
+      "total_count": 98000,
+      "female_count": 49000,
+      "male_count": 49000,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    },
+    {
+      "country_code": "UK",
+      "country_name": "United Kingdom",
+      "total_count": 20000,
+      "female_count": 10000,
+      "male_count": 10000,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    },
+    {
+      "country_code": "SE",
+      "country_name": "Sweden",
+      "total_count": 7430,
+      "female_count": 3715,
+      "male_count": 3715,
+      "unknown_count": 0,
+      "gender_balance": 50.0
+    }
+  ]
+}
