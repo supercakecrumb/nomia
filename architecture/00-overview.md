@@ -95,6 +95,12 @@ This section defines the specific versions and tools used in the Affirm Name pro
   
 - **Charts**: recharts **3.4.1**
 
+- **Internationalization**:
+  - i18next **23.18.3** (core i18n framework)
+  - react-i18next **16.0.5** (React integration)
+  - i18next-browser-languagedetector **8.0.2** (automatic language detection)
+  - i18next-http-backend **3.0.3** (load translations from server)
+
 ---
 
 ## System Context
