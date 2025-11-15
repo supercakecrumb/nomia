@@ -4,12 +4,18 @@ The frontend carcass defines the page structure, routing, state management, API 
 
 ## Technology Stack
 
-- **Framework**: React 18+ with TypeScript
-- **Routing**: React Router v6
-- **Data Fetching**: TanStack Query (React Query) v5
-- **Styling**: Utility-first CSS (Tailwind CSS) or design system
-- **State Management**: React Context + hooks for global filter state
-- **Charts**: Recharts or similar declarative charting library
+For complete version specifications and rationale, see the **[Technology Stack section in Overview](00-overview.md#technology-stack)**.
+
+**Quick Reference:**
+- **Node.js**: **24.11.1** (LTS)
+- **Bundler**: Vite **7.2.2**
+- **Language**: TypeScript **5.9.3**
+- **Framework**: React **19.2.0** + react-dom **19.2.0**
+- **Routing**: react-router **7.9.6** + react-router-dom **7.9.6**
+- **Data Fetching**: @tanstack/react-query **5.90.9**
+- **Styling**: tailwindcss **4.1.17**
+- **Charts**: recharts **3.4.1**
+- **State Management**: React Context + hooks (for global UI state)
 
 ## Routing & Page Structure
 
