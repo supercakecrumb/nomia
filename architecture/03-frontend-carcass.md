@@ -14,8 +14,9 @@ For complete version specifications and rationale, see the **[Technology Stack s
 - **Routing**: react-router **7.9.6** + react-router-dom **7.9.6**
 - **Data Fetching**: @tanstack/react-query **5.90.9**
 - **Styling**: tailwindcss **4.1.17**
-- **Charts**: recharts **3.4.1**
+- **Charts**: tremor **3.18.7**
 - **State Management**: React Context + hooks (for global UI state)
+- **Internationalization**: i18next **23.18.3** + react-i18next **16.0.5** (see [`05-cross-cutting-concerns.md`](05-cross-cutting-concerns.md#internationalization-i18n) for details)
 
 ## Routing & Page Structure
 
@@ -250,6 +251,7 @@ export function useMetaYears() {
   <Header>
     <Logo />
     <Navigation />
+    <LanguageSwitcher /> {/* i18n language selector */}
     <SettingsMenu />
   </Header>
   <MainContent>
@@ -257,6 +259,12 @@ export function useMetaYears() {
   </MainContent>
 </AppShell>
 ```
+
+**i18n Integration:**
+- Wrap app with i18next provider in `main.tsx`
+- All text content uses translation keys (see [`05-cross-cutting-concerns.md`](05-cross-cutting-concerns.md#internationalization-i18n))
+- Language preference persisted in localStorage
+- Automatic language detection from browser on first visit
 
 ---
 
@@ -485,6 +493,64 @@ export const handlers = [
 **Recommendation:**
 - Start with Option 2 (direct import) for simplicity.
 - Migrate to Option 1 (MSW) if realistic network behavior is needed.
+
+---
+
+## Internationalization Components
+
+See comprehensive i18n implementation in [`05-cross-cutting-concerns.md`](05-cross-cutting-concerns.md#internationalization-i18n).
+
+### Language Switcher
+
+**Location:** App header (see [App Shell](#1-app-shell--layout))
+
+**Component:** `LanguageSwitcher`
+
+**Responsibilities:**
+- Display available languages (English, Russian)
+- Indicate current language
+- Switch language on click
+- Persist preference to localStorage
+
+**Visual Design:**
+- Flag emojis + language labels
+- Active state highlighting
+- Accessible with keyboard navigation
+- Mobile-friendly dropdown on small screens
+
+### Translation Integration
+
+**All UI Components Must:**
+1. Import `useTranslation` hook from `react-i18next`
+2. Use translation keys for all user-facing text
+3. Support dynamic content with interpolation
+4. Handle pluralization for counts
+
+**Example:**
+```typescript
+import { useTranslation } from 'react-i18next';
+
+function FilterBar() {
+  const { t } = useTranslation('filters');
+  
+  return (
+    <label>{t('year_range.label')}</label>
+  );
+}
+```
+
+### Translation File Organization
+
+**Namespaces:**
+- `common`: Navigation, buttons, general UI
+- `filters`: All filter-related strings
+- `pages`: Page-specific content
+- `errors`: Error messages
+- `validation`: Form validation messages
+
+**File Location:** `public/locales/{lang}/{namespace}.json`
+
+**Supported Languages:** English (`en`), Russian (`ru`)
 
 ---
 
