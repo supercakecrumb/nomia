@@ -22,8 +22,8 @@ Introduces the purpose, goals, key principles, and system context of the archite
 **Key Topics:**
 - Purpose and goals
 - Architectural principles (Contract-First, Mock-First, Separation of Concerns)
+- **Technology stack with pinned versions** (Go 1.25.4, PostgreSQL 18.1, React 19.2.0, React Router 7.9.6, and more)
 - System context diagram
-- Technology stack overview
 
 ---
 
