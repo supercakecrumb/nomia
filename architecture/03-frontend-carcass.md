@@ -49,6 +49,11 @@ Filter state is synchronized with URL query parameters to enable:
 | `sort_key` | `sortKey` | string |
 | `sort_order` | `sortOrder` | "asc" \| "desc" |
 | `page` | `page` | number |
+| `page_size` | `pageSize` | number |
+
+**Validation:**
+- `page_size`: Min 10, Max 100, Default 50
+- `page`: Min 1, Max 100 (pagination limit)
 
 ---
 

@@ -19,13 +19,37 @@ This chapter addresses system-wide concerns that affect both frontend and backen
 
 ### Error Codes
 
-| Code | HTTP Status | Meaning |
-|------|-------------|---------|
-| `invalid_params` | 400 | Invalid query parameters |
-| `not_found` | 404 | Resource not found |
-| `internal_error` | 500 | Server error |
-| `database_error` | 500 | Database query failed |
-| `parse_error` | 500 | Dataset parsing failed |
+| Code | HTTP Status | Meaning | Example |
+|------|-------------|---------|---------|
+| `invalid_params` | 400 | Invalid query parameters | `year_from > year_to` |
+| `invalid_glob` | 400 | Invalid glob pattern | `name_glob="[invalid"` |
+| `validation_error` | 400 | Request validation failed | Missing required field |
+| `unauthorized` | 401 | Missing or invalid auth token | No `Authorization` header |
+| `forbidden` | 403 | Insufficient permissions | Non-admin accessing upload |
+| `not_found` | 404 | Resource not found | Name doesn't exist |
+| `conflict` | 409 | Duplicate resource | Dataset already uploaded |
+| `payload_too_large` | 413 | File too large | Upload > 100MB |
+| `too_many_requests` | 429 | Rate limit exceeded | > 100 req/min |
+| `internal_error` | 500 | Server error | Unexpected exception |
+| `database_error` | 500 | Database query failed | Connection lost |
+| `parse_error` | 500 | Dataset parsing failed | Invalid CSV format |
+
+**Rate Limiting Headers:**
+
+When rate limit is exceeded (429), include these headers in response:
+
+```
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1605564000
+Retry-After: 60
+```
+
+**Field Descriptions:**
+- `X-RateLimit-Limit`: Maximum requests allowed per window
+- `X-RateLimit-Remaining`: Requests remaining in current window
+- `X-RateLimit-Reset`: Unix timestamp when limit resets
+- `Retry-After`: Seconds to wait before retrying
 
 ### Frontend Error Display
 

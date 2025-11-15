@@ -14,14 +14,34 @@ A single numeric axis representing the ratio between female and male usage:
 
 **Calculation:**
 ```
-gender_balance = 100 × (male_count / (male_count + female_count))
+If (male_count + female_count) == 0:
+    gender_balance = NULL  // No binary gender data
+Else:
+    gender_balance = 100 × (male_count / (male_count + female_count))
 ```
 
 Where:
 - `female_count` = total occurrences recorded as female
 - `male_count` = total occurrences recorded as male
+- `unknown_count` = total occurrences recorded as unknown/nonbinary
 
 **Rationale:** This spectrum model avoids binary gender assumptions and makes it easy to filter for unisex names (values near 50) or names with specific gender associations.
+
+**Handling Unknown/Nonbinary Data:**
+
+The API exposes three gender count fields:
+- `female_count` - count of female occurrences
+- `male_count` - count of male occurrences
+- `unknown_count` - count of unknown/nonbinary occurrences
+
+Additional fields:
+- `gender_balance` - 0–100 axis value (NULL if no binary gender data)
+- `has_unknown_data` - boolean, true if unknown_count > 0
+
+**Display Rules:**
+- Show gender balance bar only when `gender_balance` is not NULL
+- When `has_unknown_data` is true, show indicator (e.g., badge "Includes nonbinary/unknown data")
+- In detail view, show full breakdown: "Female: 45% | Male: 55% | Unknown: 2%"
 
 ### Popularity Metrics
 
@@ -40,6 +60,20 @@ These metrics enable three user-friendly popularity filters:
 - **Coverage Percentile**: Keep names while `cumulative_share ≤ threshold` (e.g., "top 95% of people").
 
 **Important:** These three filters are different expressions of the same underlying cut in the popularity distribution. The frontend treats only one as the "driver" at any time and derives the other two from API responses.
+
+**Precedence When Multiple Filters Provided:**
+
+If the backend receives multiple popularity filters, it applies them in this priority order:
+
+1. **`coverage_percent`** (highest priority) - If provided and > 0, use it (ignore others)
+2. **`top_n`** - If provided and > 0 (and no coverage_percent), use it (ignore min_count)
+3. **`min_count`** (lowest priority) - If provided and > 0 (and no other filters)
+4. **None** - If no filters provided or all are 0/null, return all names (no popularity filter)
+
+**Frontend Behavior:**
+- Track which filter was last changed by user (`popularityDriver` in state)
+- Send only the active filter to backend in API request
+- Derive inactive filter values from `popularity_summary` in API response (see GET /api/names response below)
 
 ### Presence Period
 
@@ -174,7 +208,13 @@ A glob-based pattern filter for name matching:
 | `sort_key` | string | No | "popularity" | Sort field: "popularity", "total_count", "name", "gender_balance", "countries". |
 | `sort_order` | string | No | "asc" | Sort order: "asc" or "desc". |
 | `page` | integer | No | 1 | Page number (1-based). |
-| `page_size` | integer | No | 50 | Number of results per page (max 100). |
+| `page_size` | integer | No | 50 | Number of results per page (min 10, max 100). |
+
+**Parameter Validation:**
+- `year_from` must be <= `year_to`
+- `gender_balance_min` must be <= `gender_balance_max`
+- `page` must be >= 1 and <= 100 (pagination limit)
+- `page_size` must be >= 10 and <= 100
 
 **Filter Interaction:**
 - All filters are combined with logical AND.
@@ -196,7 +236,15 @@ A glob-based pattern filter for name matching:
     "total_count": 1523,
     "total_pages": 31,
     "db_start": 1880,
-    "db_end": 2023
+    "db_end": 2023,
+    "popularity_summary": {
+      "population_total": 1530245,
+      "active_driver": "coverage_percent",
+      "active_value": 95.0,
+      "derived_min_count": 487,
+      "derived_top_n": 1200,
+      "derived_coverage_percent": 95.0
+    }
   },
   "names": [
     {
@@ -336,9 +384,13 @@ To enable parallel development, the contract is exemplified by JSON fixture file
 - Should cover edge cases:
   - Empty results.
   - Names with presence periods at boundaries (–end, start–, –).
-  - Names with gender balance at extremes (0, 50, 100).
+  - Names with gender balance at extremes (0, 25, 40, 50, 54, 100).
+  - Names with unknown_count > 0 (has_unknown_data = true, gender_balance = NULL).
   - Multiple countries per name.
   - Various popularity ranks and cumulative shares.
+  - Popularity summary metadata with all three derived values.
+
+**See:** [`architecture/FIXTURE-SPECIFICATIONS.md`](FIXTURE-SPECIFICATIONS.md) for complete fixture specifications with JSON examples.
 
 ---
 
