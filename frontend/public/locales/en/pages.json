@@ -1,12 +1,32 @@
 {
   "main": {
-    "title": "Welcome to Affirm Name",
-    "subtitle": "Discover popular names across different cultures and time periods",
-    "description": "Explore a comprehensive database of names with filtering options for years, countries, and gender balance."
+    "hero": {
+      "title": "Affirm Name",
+      "tagline": "Discover and affirm names that resonate with your identity"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "Affirm Name is dedicated to helping trans and nonbinary individuals explore and discover names that truly reflect their identity. We provide comprehensive data on name trends, popularity, and cultural contexts to support your journey of self-affirmation."
+    },
+    "features": {
+      "title": "Features",
+      "explore": "Explore thousands of names with detailed statistics",
+      "filter": "Filter by year, country, and gender balance",
+      "trends": "View historical trends and popularity charts",
+      "affirming": "Find names that affirm your authentic self"
+    },
+    "cta": {
+      "button": "Start Exploring Names",
+      "subtitle": "Begin your journey to finding the perfect name"
+    }
   },
   "namesExplorer": {
     "title": "Names Explorer",
     "subtitle": "Browse and filter names",
+    "comingSoon": {
+      "filters": "Filter options coming soon...",
+      "table": "Names table coming soon..."
+    },
     "resultsCount": "{{count}} names found",
     "sortBy": "Sort by",
     "sortOptions": {
@@ -17,10 +37,15 @@
   },
   "nameDetail": {
     "title": "Name Details",
+    "backButton": "Back to Names",
+    "loading": "Loading name data...",
+    "error": "Error loading name data",
+    "noData": "No data available for this name",
     "statistics": "Statistics",
     "popularity": "Popularity",
     "distribution": "Distribution",
     "trends": "Trends Over Time",
+    "chartsComingSoon": "Detailed charts and statistics coming soon...",
     "relatedNames": "Related Names",
     "meaning": "Meaning",
     "origin": "Origin"
