@@ -30,6 +30,7 @@ export default function NamesExplorerPage() {
     setSearch,
     setSort,
     setPage,
+    setPageSize,
     resetFilters,
     updateDerivedValues,
     getApiParams,
@@ -83,36 +84,6 @@ export default function NamesExplorerPage() {
           </div>
         </div>
 
-        {/* Connection Status Banner */}
-        {data?.names && data?.meta && (
-          <div className="mb-6 animate-slide-down">
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-4 shadow-sm">
-              <div className="flex items-center gap-3">
-                <div className="flex-shrink-0">
-                  <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-md">
-                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-green-900">
-                    ✓ API Connected Successfully
-                  </p>
-                  <p className="text-xs text-green-700 mt-0.5">
-                    {data.names.length} names loaded • Page {data.meta.page} of {data.meta.total_pages} • {data.meta.total_count.toLocaleString()} total results
-                  </p>
-                  {data.meta.popularity_summary?.active_driver && (
-                    <p className="text-xs text-green-600 mt-1">
-                      Active filter: {data.meta.popularity_summary.active_driver} = {data.meta.popularity_summary.active_value}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Filter Bar */}
         <div className="mb-8 animate-slide-up">
           <FilterBar
@@ -158,6 +129,7 @@ export default function NamesExplorerPage() {
               totalCount={data.meta.total_count}
               pageSize={data.meta.page_size}
               onPageChange={setPage}
+              onPageSizeChange={setPageSize}
             />
           </div>
         )}

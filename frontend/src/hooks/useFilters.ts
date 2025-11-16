@@ -39,6 +39,7 @@ interface FilterState {
   
   // Pagination
   page: number;
+  pageSize: number;
 }
 
 export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number = 2023) => {
@@ -58,6 +59,7 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
     const sortBy = (searchParams.get('sort_by') as any) || null;
     const sortOrder = (searchParams.get('sort_order') as 'asc' | 'desc') || null;
     const page = parseInt(searchParams.get('page') || '1');
+    const pageSize = parseInt(searchParams.get('page_size') || '100');
     
     // Determine active driver
     let popularityDriver: PopularityDriver = null;
@@ -79,6 +81,7 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
       sortBy,
       sortOrder,
       page,
+      pageSize,
     };
   });
   
@@ -105,6 +108,7 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
     if (filters.sortBy) params.set('sort_by', filters.sortBy);
     if (filters.sortOrder) params.set('sort_order', filters.sortOrder);
     if (filters.page > 1) params.set('page', String(filters.page));
+    if (filters.pageSize !== 100) params.set('page_size', String(filters.pageSize));
     
     setSearchParams(params, { replace: true });
   }, [
@@ -120,6 +124,7 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
     filters.sortBy,
     filters.sortOrder,
     filters.page,
+    filters.pageSize,
     defaultYearMin,
     defaultYearMax,
     setSearchParams,
@@ -129,7 +134,7 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
   const getApiParams = useCallback((): NamesFilterParams => {
     const params: NamesFilterParams = {
       page: filters.page,
-      page_size: 20,
+      page_size: filters.pageSize,
     };
     
     if (debouncedYearMin !== defaultYearMin) params.year_min = debouncedYearMin;
@@ -216,6 +221,10 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
     setFilters(prev => ({ ...prev, page }));
   }, []);
   
+  const setPageSize = useCallback((pageSize: number) => {
+    setFilters(prev => ({ ...prev, pageSize, page: 1 }));
+  }, []);
+  
   const resetFilters = useCallback(() => {
     setFilters({
       yearMin: defaultYearMin,
@@ -231,6 +240,7 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
       sortBy: null,
       sortOrder: null,
       page: 1,
+      pageSize: 100,
     });
   }, [defaultYearMin, defaultYearMax]);
   
@@ -269,6 +279,7 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
     setSearch,
     setSort,
     setPage,
+    setPageSize,
     resetFilters,
     updateDerivedValues,
     getApiParams,
