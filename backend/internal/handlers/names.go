@@ -65,7 +65,44 @@ func NameTrend(cfg *config.Config) http.HandlerFunc {
 			return
 		}
 
-		// Real database logic (stub for Phase 2)
-		WriteError(w, http.StatusNotImplemented, "Database mode not implemented")
+		// Get year range for defaults
+		ctx := r.Context()
+		yearRange, err := cfg.DB.GetYearRange(ctx)
+		if err != nil {
+			WriteError(w, http.StatusInternalServerError, fmt.Sprintf("Database error: %v", err))
+			return
+		}
+
+		// Parse and validate parameters
+		params, err := ParseNameTrendParams(r.URL.Query(), yearRange.MinYear, yearRange.MaxYear)
+		if err != nil {
+			WriteError(w, http.StatusBadRequest, fmt.Sprintf("Invalid parameters: %v", err))
+			return
+		}
+
+		// Convert to db.NameTrendParams
+		dbParams := &db.NameTrendParams{
+			Name:      params.Name,
+			YearFrom:  params.YearFrom,
+			YearTo:    params.YearTo,
+			Countries: params.Countries,
+		}
+
+		// Query database
+		response, err := cfg.DB.GetNameTrend(ctx, dbParams)
+		if err != nil {
+			WriteError(w, http.StatusInternalServerError, fmt.Sprintf("Database error: %v", err))
+			return
+		}
+
+		// Check if name exists
+		if response.Summary.TotalCount == 0 {
+			WriteError(w, http.StatusNotFound, fmt.Sprintf("Name '%s' not found", params.Name))
+			return
+		}
+
+		// Return JSON response
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
 	}
 }

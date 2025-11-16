@@ -562,3 +562,221 @@ func (db *DB) GetNamesList(ctx context.Context, params *NamesListParams) (*Names
 		Names: names,
 	}, nil
 }
+
+type NameTrendSummary struct {
+	TotalCount    int      `json:"total_count"`
+	FemaleCount   int      `json:"female_count"`
+	MaleCount     int      `json:"male_count"`
+	GenderBalance float64  `json:"gender_balance"`
+	NameStart     int      `json:"name_start"`
+	NameEnd       int      `json:"name_end"`
+	Countries     []string `json:"countries"`
+}
+
+type TimeSeriesPoint struct {
+	Year          int     `json:"year"`
+	TotalCount    int     `json:"total_count"`
+	FemaleCount   int     `json:"female_count"`
+	MaleCount     int     `json:"male_count"`
+	GenderBalance float64 `json:"gender_balance"`
+}
+
+type CountryBreakdown struct {
+	CountryCode   string  `json:"country_code"`
+	CountryName   string  `json:"country_name"`
+	TotalCount    int     `json:"total_count"`
+	FemaleCount   int     `json:"female_count"`
+	MaleCount     int     `json:"male_count"`
+	GenderBalance float64 `json:"gender_balance"`
+}
+
+type NameTrendResponse struct {
+	Name       string             `json:"name"`
+	Meta       map[string]int     `json:"meta"`
+	Summary    NameTrendSummary   `json:"summary"`
+	TimeSeries []TimeSeriesPoint  `json:"time_series"`
+	ByCountry  []CountryBreakdown `json:"by_country"`
+}
+
+type NameTrendParams struct {
+	Name      string
+	YearFrom  int
+	YearTo    int
+	Countries []string
+}
+
+func (db *DB) GetNameTrend(ctx context.Context, params *NameTrendParams) (*NameTrendResponse, error) {
+	// Get database year range for meta
+	yearRange, _ := db.GetYearRange(ctx)
+
+	// Query 1: Overall summary
+	summaryQuery := `
+		SELECT 
+			SUM(n.count) as total_count,
+			SUM(CASE WHEN n.gender = 'F' THEN n.count ELSE 0 END) as female_count,
+			SUM(CASE WHEN n.gender = 'M' THEN n.count ELSE 0 END) as male_count,
+			CASE 
+				WHEN SUM(CASE WHEN n.gender IN ('M','F') THEN n.count ELSE 0 END) = 0 THEN NULL
+				ELSE 100.0 * SUM(CASE WHEN n.gender = 'M' THEN n.count ELSE 0 END)::float / 
+				     NULLIF(SUM(CASE WHEN n.gender IN ('M','F') THEN n.count ELSE 0 END), 0)
+			END as gender_balance,
+			MIN(n.year) as name_start,
+			MAX(n.year) as name_end,
+			ARRAY_AGG(DISTINCT c.code ORDER BY c.code) as countries
+		FROM names n
+		JOIN countries c ON n.country_id = c.id
+		WHERE n.name ILIKE $1
+		  AND n.year >= $2
+		  AND n.year <= $3
+		  AND ($4::text[] IS NULL OR c.code = ANY($4::text[]))
+	`
+
+	var countries interface{}
+	if len(params.Countries) == 0 {
+		countries = nil
+	} else {
+		countries = params.Countries
+	}
+
+	var summary NameTrendSummary
+	var genderBalance *float64
+	var totalCount *int
+	var femaleCount *int
+	var maleCount *int
+	var nameStart *int
+	var nameEnd *int
+
+	err := db.Pool.QueryRow(ctx, summaryQuery,
+		params.Name, params.YearFrom, params.YearTo, countries).Scan(
+		&totalCount,
+		&femaleCount,
+		&maleCount,
+		&genderBalance,
+		&nameStart,
+		&nameEnd,
+		&summary.Countries,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("summary query failed: %w", err)
+	}
+
+	// If totalCount is NULL, no data exists for this name
+	if totalCount == nil || *totalCount == 0 {
+		summary.TotalCount = 0
+		summary.FemaleCount = 0
+		summary.MaleCount = 0
+		summary.GenderBalance = 0
+		summary.NameStart = 0
+		summary.NameEnd = 0
+		summary.Countries = []string{}
+	} else {
+		summary.TotalCount = *totalCount
+		summary.FemaleCount = *femaleCount
+		summary.MaleCount = *maleCount
+		summary.NameStart = *nameStart
+		summary.NameEnd = *nameEnd
+	}
+
+	if genderBalance != nil {
+		summary.GenderBalance = *genderBalance
+	}
+
+	// Query 2: Time series
+	timeSeriesQuery := `
+		SELECT 
+			n.year,
+			SUM(n.count) as total_count,
+			SUM(CASE WHEN n.gender = 'F' THEN n.count ELSE 0 END) as female_count,
+			SUM(CASE WHEN n.gender = 'M' THEN n.count ELSE 0 END) as male_count,
+			CASE 
+				WHEN SUM(CASE WHEN n.gender IN ('M','F') THEN n.count ELSE 0 END) = 0 THEN NULL
+				ELSE 100.0 * SUM(CASE WHEN n.gender = 'M' THEN n.count ELSE 0 END)::float / 
+				     NULLIF(SUM(CASE WHEN n.gender IN ('M','F') THEN n.count ELSE 0 END), 0)
+			END as gender_balance
+		FROM names n
+		JOIN countries c ON n.country_id = c.id
+		WHERE n.name ILIKE $1
+		  AND n.year >= $2
+		  AND n.year <= $3
+		  AND ($4::text[] IS NULL OR c.code = ANY($4::text[]))
+		GROUP BY n.year
+		ORDER BY n.year
+	`
+
+	rows, err := db.Pool.Query(ctx, timeSeriesQuery,
+		params.Name, params.YearFrom, params.YearTo, countries)
+	if err != nil {
+		return nil, fmt.Errorf("time series query failed: %w", err)
+	}
+	defer rows.Close()
+
+	var timeSeries []TimeSeriesPoint
+	for rows.Next() {
+		var ts TimeSeriesPoint
+		var gb *float64
+		err := rows.Scan(&ts.Year, &ts.TotalCount, &ts.FemaleCount, &ts.MaleCount, &gb)
+		if err != nil {
+			return nil, fmt.Errorf("time series scan failed: %w", err)
+		}
+		if gb != nil {
+			ts.GenderBalance = *gb
+		}
+		timeSeries = append(timeSeries, ts)
+	}
+
+	// Query 3: By country
+	byCountryQuery := `
+		SELECT 
+			c.code as country_code,
+			c.name as country_name,
+			SUM(n.count) as total_count,
+			SUM(CASE WHEN n.gender = 'F' THEN n.count ELSE 0 END) as female_count,
+			SUM(CASE WHEN n.gender = 'M' THEN n.count ELSE 0 END) as male_count,
+			CASE 
+				WHEN SUM(CASE WHEN n.gender IN ('M','F') THEN n.count ELSE 0 END) = 0 THEN NULL
+				ELSE 100.0 * SUM(CASE WHEN n.gender = 'M' THEN n.count ELSE 0 END)::float / 
+				     NULLIF(SUM(CASE WHEN n.gender IN ('M','F') THEN n.count ELSE 0 END), 0)
+			END as gender_balance
+		FROM names n
+		JOIN countries c ON n.country_id = c.id
+		WHERE n.name ILIKE $1
+		  AND n.year >= $2
+		  AND n.year <= $3
+		  AND ($4::text[] IS NULL OR c.code = ANY($4::text[]))
+		GROUP BY c.code, c.name
+		ORDER BY total_count DESC
+	`
+
+	rows, err = db.Pool.Query(ctx, byCountryQuery,
+		params.Name, params.YearFrom, params.YearTo, countries)
+	if err != nil {
+		return nil, fmt.Errorf("by country query failed: %w", err)
+	}
+	defer rows.Close()
+
+	var byCountry []CountryBreakdown
+	for rows.Next() {
+		var cb CountryBreakdown
+		var gb *float64
+		err := rows.Scan(&cb.CountryCode, &cb.CountryName, &cb.TotalCount,
+			&cb.FemaleCount, &cb.MaleCount, &gb)
+		if err != nil {
+			return nil, fmt.Errorf("by country scan failed: %w", err)
+		}
+		if gb != nil {
+			cb.GenderBalance = *gb
+		}
+		byCountry = append(byCountry, cb)
+	}
+
+	return &NameTrendResponse{
+		Name: params.Name,
+		Meta: map[string]int{
+			"db_start": yearRange.MinYear,
+			"db_end":   yearRange.MaxYear,
+		},
+		Summary:    summary,
+		TimeSeries: timeSeries,
+		ByCountry:  byCountry,
+	}, nil
+}
