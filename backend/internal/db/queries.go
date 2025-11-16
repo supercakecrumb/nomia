@@ -418,15 +418,21 @@ func (db *DB) GetNamesList(ctx context.Context, params *NamesListParams) (*Names
 		tc.cnt as total_count_val
 	FROM popularity_filtered pf
 	CROSS JOIN total_count tc
-	ORDER BY 
-		CASE WHEN $10 = 'popularity' AND $11 = 'asc' THEN pf.rank END ASC,
-		CASE WHEN $10 = 'popularity' AND $11 = 'desc' THEN pf.rank END DESC,
-		CASE WHEN $10 = 'total_count' AND $11 = 'asc' THEN pf.total_count END ASC,
-		CASE WHEN $10 = 'total_count' AND $11 = 'desc' THEN pf.total_count END DESC,
-		CASE WHEN $10 = 'name' AND $11 = 'asc' THEN pf.name END ASC,
-		CASE WHEN $10 = 'name' AND $11 = 'desc' THEN pf.name END DESC,
-		CASE WHEN $10 = 'gender_balance' AND $11 = 'asc' THEN pf.gender_balance END ASC,
-		CASE WHEN $10 = 'gender_balance' AND $11 = 'desc' THEN pf.gender_balance END DESC,
+	ORDER BY
+		CASE
+			WHEN $10 = 'popularity' AND $11 = 'asc' THEN pf.rank
+			WHEN $10 = 'popularity' AND $11 = 'desc' THEN -pf.rank
+			WHEN $10 = 'total_count' AND $11 = 'asc' THEN pf.total_count
+			WHEN $10 = 'total_count' AND $11 = 'desc' THEN -pf.total_count
+			WHEN $10 = 'gender_balance' AND $11 = 'asc' THEN pf.gender_balance
+			WHEN $10 = 'gender_balance' AND $11 = 'desc' THEN -pf.gender_balance
+		END ASC NULLS LAST,
+		CASE
+			WHEN $10 = 'name' AND $11 = 'asc' THEN pf.name
+		END ASC NULLS LAST,
+		CASE
+			WHEN $10 = 'name' AND $11 = 'desc' THEN pf.name
+		END DESC NULLS LAST,
 		-- Tie breakers
 		pf.total_count DESC,
 		pf.name ASC
@@ -509,7 +515,10 @@ func (db *DB) GetNamesList(ctx context.Context, params *NamesListParams) (*Names
 	}
 
 	// Get database year range for meta
-	yearRange, _ := db.GetYearRange(ctx)
+	yearRange, err := db.GetYearRange(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get year range: %w", err)
+	}
 
 	// Calculate total pages
 	totalPages := (totalCount + params.PageSize - 1) / params.PageSize
@@ -607,7 +616,10 @@ type NameTrendParams struct {
 
 func (db *DB) GetNameTrend(ctx context.Context, params *NameTrendParams) (*NameTrendResponse, error) {
 	// Get database year range for meta
-	yearRange, _ := db.GetYearRange(ctx)
+	yearRange, errRange := db.GetYearRange(ctx)
+	if errRange != nil {
+		return nil, fmt.Errorf("failed to get year range: %w", errRange)
+	}
 
 	// Query 1: Overall summary
 	summaryQuery := `

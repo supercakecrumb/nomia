@@ -17,7 +17,7 @@ type Config struct {
 // Load reads configuration from .env file and environment variables
 func Load() (*Config, error) {
 	// Set default values
-	viper.SetDefault("FIXTURE_MODE", true)
+	viper.SetDefault("FIXTURE_MODE", false)
 	viper.SetDefault("PORT", "8080")
 	viper.SetDefault("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/affirm_name?sslmode=disable")
 	viper.SetDefault("FRONTEND_URL", "http://localhost:5173")
