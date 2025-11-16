@@ -1,0 +1,7 @@
+2025-11-16 21:59:10.957	[34mINFO[0m	server/main.go:82	Database connected successfully
+2025-11-16 21:59:10.957	[34mINFO[0m	server/main.go:107	Server starting	{"port": "8080", "fixture_mode": false, "frontend_url": "http://localhost:5173"}
+2025-11-16 21:59:10.957	[31mFATAL[0m	server/main.go:116	Server failed to start	{"error": "listen tcp :8080: bind: address already in use"}
+main.main
+	/Users/val-kiel/Personal/affirm-name-repos/affirm-name-backend/backend/cmd/server/main.go:116
+runtime.main
+	/opt/homebrew/Cellar/go/1.25.3/libexec/src/runtime/proc.go:285
