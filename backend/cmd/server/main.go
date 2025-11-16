@@ -69,6 +69,9 @@ func main() {
 	r.Get("/api/names", handlers.NamesList(cfg))
 	r.Get("/api/names/trend", handlers.NameTrend(cfg))
 
+	// Health check endpoint
+	r.Get("/health", handlers.Health(cfg))
+
 	// Log startup information
 	logger.Info("Server starting",
 		zap.String("port", cfg.Port),
