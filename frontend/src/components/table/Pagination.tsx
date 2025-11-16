@@ -36,51 +36,79 @@ export default function Pagination({
   const canGoNext = currentPage < totalPages;
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 py-3 bg-white border-t border-gray-200">
-      {/* Results info */}
-      <div className="text-sm text-gray-700">
-        {t('pagination.showing')} <span className="font-medium">{formatNumber(startItem)}</span>{' '}
-        {t('pagination.to')} <span className="font-medium">{formatNumber(endItem)}</span>{' '}
-        {t('pagination.of')} <span className="font-medium">{formatNumber(totalCount)}</span>{' '}
-        {t('pagination.results')}
-      </div>
-
-      {/* Navigation buttons */}
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => onPageChange(currentPage - 1)}
-          disabled={!canGoPrevious}
-          className={`
-            px-3 py-2 text-sm font-medium rounded-md
-            ${
-              canGoPrevious
-                ? 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                : 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'
-            }
-          `}
-        >
-          {t('pagination.previous')}
-        </button>
-
-        <div className="text-sm text-gray-700">
-          {t('pagination.page')} <span className="font-medium">{currentPage}</span>{' '}
-          {t('pagination.of')} <span className="font-medium">{totalPages}</span>
+    <div className="bg-white rounded-2xl shadow-medium border border-gray-100 overflow-hidden">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4">
+        {/* Results info */}
+        <div className="text-sm text-gray-700 flex items-center gap-2">
+          <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span>
+            {t('pagination.showing')} <span className="font-semibold text-gray-900">{formatNumber(startItem)}</span>{' '}
+            {t('pagination.to')} <span className="font-semibold text-gray-900">{formatNumber(endItem)}</span>{' '}
+            {t('pagination.of')} <span className="font-semibold text-gray-900">{formatNumber(totalCount)}</span>{' '}
+            {t('pagination.results')}
+          </span>
         </div>
 
-        <button
-          onClick={() => onPageChange(currentPage + 1)}
-          disabled={!canGoNext}
-          className={`
-            px-3 py-2 text-sm font-medium rounded-md
-            ${
-              canGoNext
-                ? 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                : 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'
-            }
-          `}
-        >
-          {t('pagination.next')}
-        </button>
+        {/* Navigation buttons */}
+        <div className="flex items-center gap-2">
+          {/* Previous Button */}
+          <button
+            onClick={() => onPageChange(currentPage - 1)}
+            disabled={!canGoPrevious}
+            className={`
+              flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-200
+              ${
+                canGoPrevious
+                  ? 'bg-white text-gray-700 border-2 border-gray-300 hover:border-primary-400 hover:bg-primary-50 hover:text-primary-700 shadow-sm hover:shadow-md active:scale-95'
+                  : 'bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed'
+              }
+            `}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            {t('pagination.previous')}
+          </button>
+
+          {/* Page Info */}
+          <div className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl border-2 border-primary-200">
+            <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+            </svg>
+            <span className="text-sm font-semibold text-gray-700">
+              {t('pagination.page')} <span className="text-primary-700">{currentPage}</span>{' '}
+              {t('pagination.of')} <span className="text-primary-700">{totalPages}</span>
+            </span>
+          </div>
+
+          {/* Mobile Page Info */}
+          <div className="sm:hidden flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl border-2 border-primary-200">
+            <span className="text-sm font-semibold text-primary-700">
+              {currentPage}/{totalPages}
+            </span>
+          </div>
+
+          {/* Next Button */}
+          <button
+            onClick={() => onPageChange(currentPage + 1)}
+            disabled={!canGoNext}
+            className={`
+              flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-200
+              ${
+                canGoNext
+                  ? 'bg-gradient-to-r from-primary-600 to-primary-700 text-white hover:from-primary-700 hover:to-primary-800 shadow-md hover:shadow-lg active:scale-95'
+                  : 'bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed'
+              }
+            `}
+          >
+            {t('pagination.next')}
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );
