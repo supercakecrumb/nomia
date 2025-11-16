@@ -1,0 +1,65 @@
+countries:
+  - code: US
+    name: United States
+    data_source:
+      name: Social Security Administration
+      url: https://www.ssa.gov/oact/babynames/
+      format: csv
+      encoding: utf-8
+      structure:
+        - name
+        - gender
+        - count
+      file_pattern: "yob{year}.txt"
+      years_available: 1880-2024
+      download_instructions: |
+        1. Visit https://www.ssa.gov/oact/babynames/names.zip
+        2. Download names.zip (contains all years)
+        3. Extract to names-example/ directory
+      manual_download: true
+      notes: "Files are CSV without headers. Each file contains data for one year."
+
+  - code: UK
+    name: United Kingdom
+    data_source:
+      name: Office for National Statistics
+      url: https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/livebirths/datasets/babynamesenglandandwalesbabynamesstatisticsboys
+      format: xlsx
+      encoding: utf-8
+      years_available: 1996-2022
+      download_instructions: |
+        1. Visit ONS website (separate files for boys/girls per year)
+        2. Download Excel files for desired years
+        3. Extract to names-example/uk/ directory
+      manual_download: true
+      notes: "Separate files for boys and girls. Requires Excel parsing."
+
+  - code: SE
+    name: Sweden
+    data_source:
+      name: Statistics Sweden (SCB)
+      url: https://www.scb.se/hitta-statistik/statistik-efter-amne/befolkning/amnesovergripande-statistik/namnstatistik/
+      format: xlsx
+      encoding: utf-8
+      years_available: 1998-2023
+      download_instructions: |
+        1. Visit SCB website
+        2. Navigate to name statistics section
+        3. Download files for desired years
+      manual_download: true
+      notes: "Swedish names may include characters like å, ä, ö."
+
+  - code: CA
+    name: Canada
+    data_source:
+      name: Statistics Canada
+      url: https://www150.statcan.gc.ca/n1/en/type/data
+      format: csv
+      encoding: utf-8
+      years_available: varies_by_province
+      download_instructions: |
+        1. Visit Statistics Canada portal
+        2. Search for "baby names" data
+        3. Download CSV files
+      manual_download: true
+      notes: "Provincial data may vary in format."
