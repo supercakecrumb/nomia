@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/supercakecrumb/affirm-name/internal/config"
+	"github.com/supercakecrumb/affirm-name/internal/db"
 	"github.com/supercakecrumb/affirm-name/internal/handlers"
 	"github.com/supercakecrumb/affirm-name/internal/middleware"
 	"go.uber.org/zap"
@@ -29,10 +30,21 @@ func main() {
 	}
 	defer logger.Sync()
 
-	// 3. Create chi router
+	// 3. Initialize database connection
+	if !cfg.FixtureMode {
+		database, err := db.New(cfg.DatabaseURL)
+		if err != nil {
+			logger.Fatal("Failed to connect to database", zap.Error(err))
+		}
+		defer database.Close()
+		cfg.DB = database
+		logger.Info("Database connected successfully")
+	}
+
+	// 4. Create chi router
 	r := chi.NewRouter()
 
-	// 4. Add middleware
+	// 5. Add middleware
 	r.Use(middleware.Logger(logger))
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{cfg.FrontendURL},
@@ -41,7 +53,7 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	// 5. Register routes
+	// 6. Register routes
 	r.Get("/api/meta/years", handlers.MetaYears(cfg))
 	r.Get("/api/meta/countries", handlers.MetaCountries(cfg))
 	r.Get("/api/names", handlers.NamesList(cfg))
@@ -54,7 +66,7 @@ func main() {
 		zap.String("frontend_url", cfg.FrontendURL),
 	)
 
-	// 6. Start server
+	// 7. Start server
 	addr := ":" + cfg.Port
 	if err := http.ListenAndServe(addr, r); err != nil {
 		logger.Fatal("Server failed to start", zap.Error(err))

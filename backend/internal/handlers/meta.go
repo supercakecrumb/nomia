@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/supercakecrumb/affirm-name/internal/config"
@@ -20,8 +22,17 @@ func MetaYears(cfg *config.Config) http.HandlerFunc {
 			return
 		}
 
-		// Real database logic (stub for Phase 2)
-		WriteError(w, http.StatusNotImplemented, "Database mode not implemented")
+		// Query database
+		ctx := r.Context()
+		yearRange, err := cfg.DB.GetYearRange(ctx)
+		if err != nil {
+			WriteError(w, http.StatusInternalServerError, fmt.Sprintf("Database error: %v", err))
+			return
+		}
+
+		// Return JSON response
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(yearRange)
 	}
 }
 
@@ -39,7 +50,16 @@ func MetaCountries(cfg *config.Config) http.HandlerFunc {
 			return
 		}
 
-		// Real database logic (stub for Phase 2)
-		WriteError(w, http.StatusNotImplemented, "Database mode not implemented")
+		// Query database
+		ctx := r.Context()
+		countries, err := cfg.DB.GetCountries(ctx)
+		if err != nil {
+			WriteError(w, http.StatusInternalServerError, fmt.Sprintf("Database error: %v", err))
+			return
+		}
+
+		// Return JSON response
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(countries)
 	}
 }

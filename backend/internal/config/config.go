@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/spf13/viper"
+	"github.com/supercakecrumb/affirm-name/internal/db"
 )
 
 // Config holds the application configuration
@@ -10,6 +11,7 @@ type Config struct {
 	Port        string
 	DatabaseURL string
 	FrontendURL string
+	DB          *db.DB // Database connection pool
 }
 
 // Load reads configuration from .env file and environment variables
