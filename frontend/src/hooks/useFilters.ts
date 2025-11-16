@@ -148,8 +148,17 @@ export const useFilters = (defaultYearMin?: number, defaultYearMax?: number) => 
       page_size: filters.pageSize,
     };
     
-    if (debouncedYearMin !== defaultYearMin) params.year_min = debouncedYearMin;
-    if (debouncedYearMax !== defaultYearMax) params.year_max = debouncedYearMax;
+    // Don't send year params if they're at temp fallback values (0, 9999)
+    // These are placeholders until /api/meta/years loads
+    const TEMP_MIN_YEAR = 0;
+    const TEMP_MAX_YEAR = 9999;
+    
+    if (debouncedYearMin !== TEMP_MIN_YEAR && debouncedYearMin !== defaultYearMin) {
+      params.year_min = debouncedYearMin;
+    }
+    if (debouncedYearMax !== TEMP_MAX_YEAR && debouncedYearMax !== defaultYearMax) {
+      params.year_max = debouncedYearMax;
+    }
     if (filters.countries.length > 0) params.countries = filters.countries;
     if (debouncedGenderBalanceMin !== 0) params.gender_balance_min = debouncedGenderBalanceMin;
     if (debouncedGenderBalanceMax !== 100) params.gender_balance_max = debouncedGenderBalanceMax;
