@@ -1,0 +1,25 @@
+{
+  "title": "Фильтры",
+  "yearRange": {
+    "label": "Диапазон лет",
+    "from": "С",
+    "to": "По",
+    "placeholder": "Выберите год"
+  },
+  "countries": {
+    "label": "Страны",
+    "placeholder": "Выберите страны",
+    "all": "Все страны"
+  },
+  "genderBalance": {
+    "label": "Гендерный баланс",
+    "male": "Мужской",
+    "female": "Женский",
+    "neutral": "Нейтральный",
+    "any": "Любой"
+  },
+  "nameSearch": {
+    "label": "Поиск имени",
+    "placeholder": "Поиск по имени..."
+  }
+}

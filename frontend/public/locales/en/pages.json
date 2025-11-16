@@ -1,0 +1,28 @@
+{
+  "main": {
+    "title": "Welcome to Affirm Name",
+    "subtitle": "Discover popular names across different cultures and time periods",
+    "description": "Explore a comprehensive database of names with filtering options for years, countries, and gender balance."
+  },
+  "namesExplorer": {
+    "title": "Names Explorer",
+    "subtitle": "Browse and filter names",
+    "resultsCount": "{{count}} names found",
+    "sortBy": "Sort by",
+    "sortOptions": {
+      "popularity": "Popularity",
+      "alphabetical": "Alphabetical",
+      "recent": "Most Recent"
+    }
+  },
+  "nameDetail": {
+    "title": "Name Details",
+    "statistics": "Statistics",
+    "popularity": "Popularity",
+    "distribution": "Distribution",
+    "trends": "Trends Over Time",
+    "relatedNames": "Related Names",
+    "meaning": "Meaning",
+    "origin": "Origin"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "title": "Filters",
+  "yearRange": {
+    "label": "Year Range",
+    "from": "From",
+    "to": "To",
+    "placeholder": "Select year"
+  },
+  "countries": {
+    "label": "Countries",
+    "placeholder": "Select countries",
+    "all": "All Countries"
+  },
+  "genderBalance": {
+    "label": "Gender Balance",
+    "male": "Male",
+    "female": "Female",
+    "neutral": "Neutral",
+    "any": "Any"
+  },
+  "nameSearch": {
+    "label": "Name Search",
+    "placeholder": "Search by name..."
+  }
+}
