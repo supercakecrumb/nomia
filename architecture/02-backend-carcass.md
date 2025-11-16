@@ -4,11 +4,16 @@ The backend carcass defines the database schema, HTTP handler structure, ingesti
 
 ## Technology Stack
 
-- **Language**: Go
-- **Database**: PostgreSQL 14+
-- **HTTP Framework**: Standard library (`net/http`) or lightweight router (e.g., `chi`, `gorilla/mux`)
-- **Database Driver**: `pgx` or `database/sql` with `pq`
-- **Configuration**: Environment variables or config file (e.g., `viper`)
+For complete version specifications and rationale, see the **[Technology Stack section in Overview](00-overview.md#technology-stack)**.
+
+**Quick Reference:**
+- **Language**: Go **1.25.4**
+- **Database**: PostgreSQL **18.1**
+- **HTTP**: `net/http` + `github.com/go-chi/chi/v5@v5.2.3`
+- **Database Driver**: `github.com/jackc/pgx/v5@v5.7.6` (primary)
+- **Migrations**: `github.com/golang-migrate/migrate/v4@v4.19.0`
+- **Configuration**: `github.com/spf13/viper@v1.21.0`
+- **Logging**: `log/slog` over sugaring of `go.uber.org/zap@v1.27.0`
 
 ## Database Schema
 

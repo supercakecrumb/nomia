@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: affirm-name-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - FIXTURE_MODE=false
+      - PORT=8080
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD:-postgres}@postgres:5432/affirm_name?sslmode=disable
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - affirm-network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: affirm-name-db-prod
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: affirm_name
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - affirm-network
+
+volumes:
+  postgres_data_prod:
+    driver: local
+
+networks:
+  affirm-network:
+    driver: bridge
