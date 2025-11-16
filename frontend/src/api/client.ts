@@ -191,9 +191,8 @@ export const fetchNameTrend = async (
     return nameDetailFixture;
   }
   
-  const { name, ...filters } = params;
-  const queryString = buildQueryString(filters);
-  return makeRequest<NameTrendResponse>(`/api/names/${encodeURIComponent(name)}${queryString}`);
+  const queryString = buildQueryString(params);
+  return makeRequest<NameTrendResponse>(`/api/names/trend${queryString}`);
 };
 
 /**
