@@ -34,7 +34,7 @@ export default function NamesExplorerPage() {
     resetFilters,
     updateDerivedValues,
     getApiParams,
-  } = useFilters(metaYears?.min_year || 1880, metaYears?.max_year || 2023);
+  } = useFilters(metaYears?.min_year || 1880, metaYears?.max_year || 2025);
   
   // Fetch names with current filters
   const { data, isLoading, error, isFetching } = useNames(getApiParams());
