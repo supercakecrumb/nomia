@@ -57,20 +57,25 @@ export default function GenderBalanceBar({
         role="img"
         aria-label={ariaLabel}
       >
-        {/* Single smooth gradient - no overlays to create seams */}
+        {/* 2x wide gradient that shifts based on gender balance position */}
         <div
           aria-hidden="true"
-          className="absolute inset-0"
+          className="absolute inset-0 transition-all duration-300 ease-out"
           style={{
             background: `linear-gradient(
               90deg,
               #ffc3dd 0%,
-              #f7c8e6 20%,
-              #ecd4f1 40%,
+              #f7c8e6 10%,
+              #ecd4f1 20%,
+              #e3dcff 25%,
               #e3dcff 50%,
-              #d3e3ff 70%,
+              #e3dcff 75%,
+              #d3e3ff 80%,
+              #c4deff 90%,
               #bfd9ff 100%
             )`,
+            backgroundSize: '200% 100%',
+            backgroundPosition: `${clamped}% center`,
           }}
         />
 
