@@ -4,19 +4,45 @@
     "label": "Year Range",
     "from": "From",
     "to": "To",
-    "placeholder": "Select year"
+    "placeholder": "Select year",
+    "currentRange": "{{min}} - {{max}}"
   },
   "countries": {
     "label": "Countries",
     "placeholder": "Select countries",
-    "all": "All Countries"
+    "all": "All Countries",
+    "selected": "Countries ({{count}})",
+    "selectedWithFlags": "{{flags}} +{{count}}"
   },
   "genderBalance": {
     "label": "Gender Balance",
     "male": "Male",
     "female": "Female",
     "neutral": "Neutral",
-    "any": "Any"
+    "any": "Any",
+    "moreFemale": "More Female",
+    "moreMale": "More Male",
+    "range": "{{min}}% - {{max}}%"
+  },
+  "popularity": {
+    "label": "Popularity Filters",
+    "minCount": {
+      "label": "Min Count",
+      "placeholder": "Minimum occurrences",
+      "active": "Active: Min Count"
+    },
+    "topN": {
+      "label": "Top N",
+      "placeholder": "Top names",
+      "active": "Active: Top N"
+    },
+    "coveragePercent": {
+      "label": "Coverage %",
+      "placeholder": "Population %",
+      "active": "Active: Coverage %"
+    },
+    "activeDriver": "Active: {{driver}} = {{value}}",
+    "derived": "Derived: {{value}}"
   },
   "nameSearch": {
     "label": "Name Search",
@@ -27,11 +53,15 @@
     "order": "Sort Order",
     "ascending": "Ascending",
     "descending": "Descending",
+    "clickToSort": "Click to sort",
+    "sortedAsc": "Sorted ascending",
+    "sortedDesc": "Sorted descending",
     "options": {
       "rank": "Rank",
       "name": "Name",
       "totalCount": "Total Count",
-      "genderBalance": "Gender Balance"
+      "genderBalance": "Gender Balance",
+      "countries": "Countries"
     }
   },
   "actions": {

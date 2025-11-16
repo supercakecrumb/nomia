@@ -2,22 +2,49 @@
  * Names Explorer Page
  * 
  * Main page for browsing and filtering gender-neutral names.
- * Phase 1: Display fixture data with basic UI components.
+ * Includes comprehensive filters with URL synchronization.
  */
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNames } from '../hooks/useNames';
+import { useFilters } from '../hooks/useFilters';
+import { useMetaYears } from '../hooks/useMetaYears';
 import FilterBar from '../components/filters/FilterBar';
 import NamesTable from '../components/table/NamesTable';
 import Pagination from '../components/table/Pagination';
 
 export default function NamesExplorerPage() {
   const { t } = useTranslation('pages');
-  const [page, setPage] = useState(1);
+  const { data: metaYears } = useMetaYears();
   
-  // Fetch names with pagination (no filters for Phase 1)
-  const { data, isLoading, error } = useNames({ page, page_size: 20 });
+  // Initialize filters with meta years
+  const {
+    filters,
+    setYearRange,
+    setCountries,
+    setGenderBalance,
+    setMinCount,
+    setTopN,
+    setCoveragePercent,
+    setSearch,
+    setSort,
+    setPage,
+    resetFilters,
+    updateDerivedValues,
+    getApiParams,
+  } = useFilters(metaYears?.min_year || 1880, metaYears?.max_year || 2023);
+  
+  // Fetch names with current filters
+  const { data, isLoading, error } = useNames(getApiParams());
+
+  // Update derived popularity values when API response changes
+  useEffect(() => {
+    if (data?.meta?.popularity_summary) {
+      const { derived_min_count, derived_top_n, derived_coverage_percent } = data.meta.popularity_summary;
+      updateDerivedValues(derived_min_count, derived_top_n, derived_coverage_percent);
+    }
+  }, [data, updateDerivedValues]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -60,6 +87,11 @@ export default function NamesExplorerPage() {
                   <p className="text-xs text-green-700 mt-0.5">
                     {data.names.length} names loaded • Page {data.meta.page} of {data.meta.total_pages} • {data.meta.total_count.toLocaleString()} total results
                   </p>
+                  {data.meta.popularity_summary && data.meta.popularity_summary.active_driver && (
+                    <p className="text-xs text-green-600 mt-1">
+                      Active filter: {data.meta.popularity_summary.active_driver} = {data.meta.popularity_summary.active_value}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -68,7 +100,26 @@ export default function NamesExplorerPage() {
 
         {/* Filter Bar */}
         <div className="mb-8 animate-slide-up">
-          <FilterBar />
+          <FilterBar
+            yearMin={filters.yearMin}
+            yearMax={filters.yearMax}
+            onYearRangeChange={setYearRange}
+            selectedCountries={filters.countries}
+            onCountriesChange={setCountries}
+            genderBalanceMin={filters.genderBalanceMin}
+            genderBalanceMax={filters.genderBalanceMax}
+            onGenderBalanceChange={setGenderBalance}
+            minCount={filters.minCount}
+            topN={filters.topN}
+            coveragePercent={filters.coveragePercent}
+            popularityDriver={filters.popularityDriver}
+            onMinCountChange={setMinCount}
+            onTopNChange={setTopN}
+            onCoveragePercentChange={setCoveragePercent}
+            nameSearch={filters.search}
+            onNameSearchChange={setSearch}
+            onReset={resetFilters}
+          />
         </div>
 
         {/* Names Table */}
@@ -77,6 +128,9 @@ export default function NamesExplorerPage() {
             names={data?.names || []}
             isLoading={isLoading}
             error={error}
+            sortBy={filters.sortBy}
+            sortOrder={filters.sortOrder}
+            onSortChange={setSort}
           />
         </div>
 

@@ -166,6 +166,9 @@ export interface NamesFilterParams {
   year_max?: number;
   gender_balance_min?: number;
   gender_balance_max?: number;
+  min_count?: number;
+  top_n?: number;
+  coverage_percent?: number;
   sort_by?: 'name' | 'total_count' | 'gender_balance' | 'rank';
   sort_order?: 'asc' | 'desc';
   search?: string;

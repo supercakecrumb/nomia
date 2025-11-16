@@ -19,10 +19,60 @@ interface NamesTableProps {
   isLoading?: boolean;
   /** Error state */
   error?: Error | null;
+  /** Current sort column */
+  sortBy?: 'name' | 'total_count' | 'gender_balance' | 'rank' | null;
+  /** Current sort order */
+  sortOrder?: 'asc' | 'desc' | null;
+  /** Callback when sort changes */
+  onSortChange?: (sortBy: 'name' | 'total_count' | 'gender_balance' | 'rank' | null, sortOrder: 'asc' | 'desc' | null) => void;
 }
 
-export default function NamesTable({ names, isLoading, error }: NamesTableProps) {
-  const { t } = useTranslation(['common', 'pages']);
+export default function NamesTable({
+  names,
+  isLoading,
+  error,
+  sortBy = null,
+  sortOrder = null,
+  onSortChange,
+}: NamesTableProps) {
+  const { t } = useTranslation(['common', 'pages', 'filters']);
+
+  const handleSort = (column: 'name' | 'total_count' | 'gender_balance' | 'rank') => {
+    if (!onSortChange) return;
+
+    // Cycle through: no sort -> asc -> desc -> no sort
+    if (sortBy !== column) {
+      onSortChange(column, 'asc');
+    } else if (sortOrder === 'asc') {
+      onSortChange(column, 'desc');
+    } else {
+      onSortChange(null, null);
+    }
+  };
+
+  const getSortIcon = (column: 'name' | 'total_count' | 'gender_balance' | 'rank') => {
+    if (sortBy !== column) {
+      return (
+        <svg className="w-4 h-4 text-gray-300 group-hover:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+        </svg>
+      );
+    }
+    
+    if (sortOrder === 'asc') {
+      return (
+        <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+        </svg>
+      );
+    }
+    
+    return (
+      <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
+    );
+  };
 
   // Loading state with shimmer skeleton
   if (isLoading) {
@@ -98,36 +148,64 @@ export default function NamesTable({ names, isLoading, error }: NamesTableProps)
           <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
             <tr>
               <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleSort('rank')}
+                  className={`flex items-center gap-2 group hover:text-primary-600 transition-colors ${
+                    sortBy === 'rank' ? 'text-primary-600' : ''
+                  } ${onSortChange ? 'cursor-pointer' : 'cursor-default'}`}
+                  disabled={!onSortChange}
+                >
                   <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
                   </svg>
                   Rank
-                </div>
+                  {onSortChange && getSortIcon('rank')}
+                </button>
               </th>
               <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleSort('name')}
+                  className={`flex items-center gap-2 group hover:text-primary-600 transition-colors ${
+                    sortBy === 'name' ? 'text-primary-600' : ''
+                  } ${onSortChange ? 'cursor-pointer' : 'cursor-default'}`}
+                  disabled={!onSortChange}
+                >
                   <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                   Name
-                </div>
+                  {onSortChange && getSortIcon('name')}
+                </button>
               </th>
               <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleSort('total_count')}
+                  className={`flex items-center gap-2 group hover:text-primary-600 transition-colors ${
+                    sortBy === 'total_count' ? 'text-primary-600' : ''
+                  } ${onSortChange ? 'cursor-pointer' : 'cursor-default'}`}
+                  disabled={!onSortChange}
+                >
                   <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
                   Total Count
-                </div>
+                  {onSortChange && getSortIcon('total_count')}
+                </button>
               </th>
               <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleSort('gender_balance')}
+                  className={`flex items-center gap-2 group hover:text-primary-600 transition-colors ${
+                    sortBy === 'gender_balance' ? 'text-primary-600' : ''
+                  } ${onSortChange ? 'cursor-pointer' : 'cursor-default'}`}
+                  disabled={!onSortChange}
+                >
                   <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
                   </svg>
                   Gender Balance
-                </div>
+                  {onSortChange && getSortIcon('gender_balance')}
+                </button>
               </th>
               <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                 <div className="flex items-center gap-2">
