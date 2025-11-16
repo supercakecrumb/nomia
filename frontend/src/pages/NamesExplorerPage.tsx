@@ -37,7 +37,7 @@ export default function NamesExplorerPage() {
   } = useFilters(metaYears?.min_year || 1880, metaYears?.max_year || 2023);
   
   // Fetch names with current filters
-  const { data, isLoading, error } = useNames(getApiParams());
+  const { data, isLoading, error, isFetching } = useNames(getApiParams());
 
   // Debug logging for API response
   useEffect(() => {
@@ -64,6 +64,14 @@ export default function NamesExplorerPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      {/* Loading Banner - Shows when fetching new data */}
+      {isFetching && data && (
+        <div className="fixed top-0 left-0 right-0 bg-primary-600 text-white py-3 px-4 flex items-center justify-center gap-3 z-50 shadow-lg">
+          <div className="inline-block animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+          <span className="text-sm font-medium">Loading names... This may take a few seconds</span>
+        </div>
+      )}
+      
       <div className="container mx-auto px-4 py-8 md:py-12">
         {/* Page Header */}
         <div className="mb-8 md:mb-12 animate-fade-in">

@@ -48,7 +48,9 @@ import type { NamesListResponse, NamesFilterParams } from '../types/api';
 export const useNames = (filters: NamesFilterParams = {}) => {
   return useQuery<NamesListResponse, Error>({
     queryKey: ['names', filters],
-    queryFn: () => fetchNames(filters),
+    queryFn: ({ signal }) => fetchNames(filters, signal),
     placeholderData: (previousData) => previousData, // Keep previous data while fetching new page
+    staleTime: 30000, // Cache for 30 seconds
+    gcTime: 5 * 60 * 1000, // Garbage collect after 5 minutes
   });
 };

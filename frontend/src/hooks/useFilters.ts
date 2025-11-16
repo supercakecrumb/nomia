@@ -85,11 +85,16 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
     };
   });
   
-  // Debounce slider values (300ms)
-  const debouncedYearMin = useDebounce(filters.yearMin, 300);
-  const debouncedYearMax = useDebounce(filters.yearMax, 300);
-  const debouncedGenderBalanceMin = useDebounce(filters.genderBalanceMin, 300);
-  const debouncedGenderBalanceMax = useDebounce(filters.genderBalanceMax, 300);
+  // Debounce slider values (1000ms for slow backend)
+  const debouncedYearMin = useDebounce(filters.yearMin, 1000);
+  const debouncedYearMax = useDebounce(filters.yearMax, 1000);
+  const debouncedGenderBalanceMin = useDebounce(filters.genderBalanceMin, 1000);
+  const debouncedGenderBalanceMax = useDebounce(filters.genderBalanceMax, 1000);
+  
+  // Debounce popularity trio values (1000ms)
+  const debouncedMinCount = useDebounce(filters.minCount, 1000);
+  const debouncedTopN = useDebounce(filters.topN, 1000);
+  const debouncedCoveragePercent = useDebounce(filters.coveragePercent, 1000);
   
   // Update URL params when filters change
   useEffect(() => {
@@ -101,9 +106,9 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
     if (filters.countries.length > 0) params.set('countries', filters.countries.join(','));
     if (debouncedGenderBalanceMin !== 0) params.set('gender_balance_min', String(debouncedGenderBalanceMin));
     if (debouncedGenderBalanceMax !== 100) params.set('gender_balance_max', String(debouncedGenderBalanceMax));
-    if (filters.minCount !== null) params.set('min_count', String(filters.minCount));
-    if (filters.topN !== null) params.set('top_n', String(filters.topN));
-    if (filters.coveragePercent !== null) params.set('coverage_percent', String(filters.coveragePercent));
+    if (debouncedMinCount !== null) params.set('min_count', String(debouncedMinCount));
+    if (debouncedTopN !== null) params.set('top_n', String(debouncedTopN));
+    if (debouncedCoveragePercent !== null) params.set('coverage_percent', String(debouncedCoveragePercent));
     if (filters.search) params.set('search', filters.search);
     if (filters.sortBy) params.set('sort_by', filters.sortBy);
     if (filters.sortOrder) params.set('sort_order', filters.sortOrder);
@@ -117,9 +122,9 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
     filters.countries,
     debouncedGenderBalanceMin,
     debouncedGenderBalanceMax,
-    filters.minCount,
-    filters.topN,
-    filters.coveragePercent,
+    debouncedMinCount,
+    debouncedTopN,
+    debouncedCoveragePercent,
     filters.search,
     filters.sortBy,
     filters.sortOrder,
@@ -142,9 +147,9 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
     if (filters.countries.length > 0) params.countries = filters.countries;
     if (debouncedGenderBalanceMin !== 0) params.gender_balance_min = debouncedGenderBalanceMin;
     if (debouncedGenderBalanceMax !== 100) params.gender_balance_max = debouncedGenderBalanceMax;
-    if (filters.minCount !== null) params.min_count = filters.minCount;
-    if (filters.topN !== null) params.top_n = filters.topN;
-    if (filters.coveragePercent !== null) params.coverage_percent = filters.coveragePercent;
+    if (debouncedMinCount !== null) params.min_count = debouncedMinCount;
+    if (debouncedTopN !== null) params.top_n = debouncedTopN;
+    if (debouncedCoveragePercent !== null) params.coverage_percent = debouncedCoveragePercent;
     if (filters.search) params.search = filters.search;
     if (filters.sortBy) params.sort_by = filters.sortBy;
     if (filters.sortOrder) params.sort_order = filters.sortOrder;
@@ -156,6 +161,9 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
     debouncedYearMax,
     debouncedGenderBalanceMin,
     debouncedGenderBalanceMax,
+    debouncedMinCount,
+    debouncedTopN,
+    debouncedCoveragePercent,
     defaultYearMin,
     defaultYearMax,
   ]);

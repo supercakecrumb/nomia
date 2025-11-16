@@ -56,15 +56,15 @@ const buildQueryString = (params: Record<string, any>): string => {
 };
 
 /**
- * Makes an HTTP request to the API
+ * Makes an HTTP request to the API with cancellation support
  */
-const makeRequest = async <T>(endpoint: string): Promise<T> => {
+const makeRequest = async <T>(endpoint: string, signal?: AbortSignal): Promise<T> => {
   const url = `${API_BASE_URL}${endpoint}`;
   
   console.log(`[API] Fetching: ${url}`);
   
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { signal });
     
     console.log(`[API] Response status: ${response.status} ${response.statusText}`);
     
@@ -148,7 +148,8 @@ export const fetchCountries = async (): Promise<CountriesResponse> => {
  * ```
  */
 export const fetchNames = async (
-  filters: NamesFilterParams = {}
+  filters: NamesFilterParams = {},
+  signal?: AbortSignal
 ): Promise<NamesListResponse> => {
   if (API_MODE === 'mock') {
     await delay(MOCK_DELAY_MS);
@@ -162,7 +163,7 @@ export const fetchNames = async (
   }
   
   const queryString = buildQueryString(filters);
-  return makeRequest<NamesListResponse>(`/api/names${queryString}`);
+  return makeRequest<NamesListResponse>(`/api/names${queryString}`, signal);
 };
 
 /**
