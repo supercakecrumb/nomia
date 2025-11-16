@@ -57,22 +57,24 @@ export default function GenderBalanceBar({
         role="img"
         aria-label={ariaLabel}
       >
-        {/* 2x wide gradient that shifts based on gender balance position */}
+        {/* 2x wide gradient with increased contrast - shifts based on gender balance */}
         <div
           aria-hidden="true"
           className="absolute inset-0 transition-all duration-300 ease-out"
           style={{
             background: `linear-gradient(
               90deg,
-              #ffc3dd 0%,
-              #f7c8e6 10%,
-              #ecd4f1 20%,
-              #e3dcff 25%,
-              #e3dcff 50%,
-              #e3dcff 75%,
-              #d3e3ff 80%,
-              #c4deff 90%,
-              #bfd9ff 100%
+              #ffb3d9 0%,
+              #ffb3d9 5%,
+              #f5b8e3 10%,
+              #e8c3ef 20%,
+              #daccf8 25%,
+              #d8d4ff 50%,
+              #c6d6ff 75%,
+              #b5d8ff 80%,
+              #a3d7ff 90%,
+              #99d5ff 95%,
+              #99d5ff 100%
             )`,
             backgroundSize: '200% 100%',
             backgroundPosition: `${clamped}% center`,
