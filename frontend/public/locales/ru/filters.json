@@ -21,5 +21,21 @@
   "nameSearch": {
     "label": "Поиск имени",
     "placeholder": "Поиск по имени..."
+  },
+  "sort": {
+    "label": "Сортировка",
+    "order": "Порядок сортировки",
+    "ascending": "По возрастанию",
+    "descending": "По убыванию",
+    "options": {
+      "rank": "Ранг",
+      "name": "Имя",
+      "totalCount": "Общее количество",
+      "genderBalance": "Гендерный баланс"
+    }
+  },
+  "actions": {
+    "reset": "Сбросить",
+    "apply": "Применить фильтры"
   }
 }

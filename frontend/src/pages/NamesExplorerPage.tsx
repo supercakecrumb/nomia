@@ -1,9 +1,23 @@
+/**
+ * Names Explorer Page
+ * 
+ * Main page for browsing and filtering gender-neutral names.
+ * Phase 1: Display fixture data with basic UI components.
+ */
+
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNames } from '../hooks/useNames';
+import FilterBar from '../components/filters/FilterBar';
+import NamesTable from '../components/table/NamesTable';
+import Pagination from '../components/table/Pagination';
 
 export default function NamesExplorerPage() {
   const { t } = useTranslation('pages');
-  const { data, isLoading, error } = useNames();
+  const [page, setPage] = useState(1);
+  
+  // Fetch names with pagination (no filters for Phase 1)
+  const { data, isLoading, error } = useNames({ page, page_size: 20 });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -22,50 +36,35 @@ export default function NamesExplorerPage() {
         {data && (
           <div className="mb-6 p-3 bg-green-50 border border-green-200 rounded-lg">
             <p className="text-sm text-green-800">
-              ✓ API Connected - {data.names.length} names loaded
+              ✓ API Connected - {data.names.length} names loaded (Page {data.meta.page} of {data.meta.total_pages})
             </p>
           </div>
         )}
 
-        {isLoading && (
-          <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-800">
-              ⟳ {t('common:labels.loading')}
-            </p>
-          </div>
-        )}
-
-        {error && (
-          <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-sm text-red-800">
-              ✗ {t('common:labels.error')}: {error.message}
-            </p>
-          </div>
-        )}
-
-        {/* Filter Bar Placeholder */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Filters
-          </h2>
-          <div className="flex items-center justify-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
-            <p className="text-gray-500 text-lg">
-              {t('namesExplorer.comingSoon.filters')}
-            </p>
-          </div>
+        {/* Filter Bar */}
+        <div className="mb-6">
+          <FilterBar />
         </div>
 
-        {/* Names Table Placeholder */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Names
-          </h2>
-          <div className="flex items-center justify-center py-20 border-2 border-dashed border-gray-300 rounded-lg">
-            <p className="text-gray-500 text-lg">
-              {t('namesExplorer.comingSoon.table')}
-            </p>
-          </div>
+        {/* Names Table */}
+        <div className="mb-6">
+          <NamesTable
+            names={data?.names || []}
+            isLoading={isLoading}
+            error={error}
+          />
         </div>
+
+        {/* Pagination */}
+        {data && data.names.length > 0 && (
+          <Pagination
+            currentPage={data.meta.page}
+            totalPages={data.meta.total_pages}
+            totalCount={data.meta.total_count}
+            pageSize={data.meta.page_size}
+            onPageChange={setPage}
+          />
+        )}
       </div>
     </div>
   );
