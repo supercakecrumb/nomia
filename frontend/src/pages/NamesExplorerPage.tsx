@@ -38,6 +38,21 @@ export default function NamesExplorerPage() {
   // Fetch names with current filters
   const { data, isLoading, error } = useNames(getApiParams());
 
+  // Debug logging for API response
+  useEffect(() => {
+    if (data) {
+      console.log('[NamesExplorerPage] API Response:', {
+        hasData: !!data,
+        hasNames: !!data.names,
+        namesIsArray: Array.isArray(data.names),
+        namesLength: data?.names?.length ?? 'null/undefined',
+        hasMeta: !!data.meta,
+        meta: data.meta,
+        fullResponse: data,
+      });
+    }
+  }, [data]);
+
   // Update derived popularity values when API response changes
   useEffect(() => {
     if (data?.meta?.popularity_summary) {
@@ -69,7 +84,7 @@ export default function NamesExplorerPage() {
         </div>
 
         {/* Connection Status Banner */}
-        {data && (
+        {data?.names && data?.meta && (
           <div className="mb-6 animate-slide-down">
             <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-4 shadow-sm">
               <div className="flex items-center gap-3">
@@ -87,7 +102,7 @@ export default function NamesExplorerPage() {
                   <p className="text-xs text-green-700 mt-0.5">
                     {data.names.length} names loaded • Page {data.meta.page} of {data.meta.total_pages} • {data.meta.total_count.toLocaleString()} total results
                   </p>
-                  {data.meta.popularity_summary && data.meta.popularity_summary.active_driver && (
+                  {data.meta.popularity_summary?.active_driver && (
                     <p className="text-xs text-green-600 mt-1">
                       Active filter: {data.meta.popularity_summary.active_driver} = {data.meta.popularity_summary.active_value}
                     </p>
@@ -135,7 +150,7 @@ export default function NamesExplorerPage() {
         </div>
 
         {/* Pagination */}
-        {data && data.names.length > 0 && (
+        {data?.names && data?.meta && data.names.length > 0 && (
           <div className="animate-slide-up animation-delay-200">
             <Pagination
               currentPage={data.meta.page}
@@ -148,7 +163,7 @@ export default function NamesExplorerPage() {
         )}
 
         {/* Empty State Encouragement */}
-        {!isLoading && !error && data && data.names.length === 0 && (
+        {!isLoading && !error && data?.names && data.names.length === 0 && (
           <div className="mt-8 text-center">
             <div className="inline-flex items-center gap-2 px-6 py-3 bg-primary-50 border-2 border-primary-200 rounded-xl text-primary-700 font-medium">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

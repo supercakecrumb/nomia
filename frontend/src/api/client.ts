@@ -61,19 +61,27 @@ const buildQueryString = (params: Record<string, any>): string => {
 const makeRequest = async <T>(endpoint: string): Promise<T> => {
   const url = `${API_BASE_URL}${endpoint}`;
   
+  console.log(`[API] Fetching: ${url}`);
+  
   try {
     const response = await fetch(url);
+    
+    console.log(`[API] Response status: ${response.status} ${response.statusText}`);
     
     if (!response.ok) {
       const error: ApiError = await response.json().catch(() => ({
         code: 'UNKNOWN_ERROR',
         message: `HTTP ${response.status}: ${response.statusText}`,
       }));
+      console.error(`[API] Error response:`, error);
       throw new Error(error.message);
     }
     
-    return await response.json();
+    const data = await response.json();
+    console.log(`[API] Success response:`, data);
+    return data;
   } catch (error) {
+    console.error(`[API] Request failed:`, error);
     if (error instanceof Error) {
       throw error;
     }
