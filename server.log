@@ -1,0 +1,3 @@
+{"level":"info","ts":1763254048.118,"caller":"server/main.go:41","msg":"Database connected successfully"}
+{"level":"info","ts":1763254048.11821,"caller":"server/main.go:63","msg":"Server starting","port":"8081","fixture_mode":false,"frontend_url":"http://localhost:5173"}
+{"level":"fatal","ts":1763254048.118337,"caller":"server/main.go:72","msg":"Server failed to start","error":"listen tcp :8081: bind: address already in use","stacktrace":"main.main\n\t/Users/val-kiel/Personal/affirm-name-repos/affirm-name-backend/backend/cmd/server/main.go:72\nruntime.main\n\t/opt/homebrew/Cellar/go/1.25.3/libexec/src/runtime/proc.go:285"}
