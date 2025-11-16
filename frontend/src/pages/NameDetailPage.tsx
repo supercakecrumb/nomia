@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router-dom';
 import { useNameTrend } from '../hooks/useNameTrend';
+import { TrendChart } from '../components/charts/TrendChart';
 
 export default function NameDetailPage() {
   const { t } = useTranslation(['pages', 'common']);
@@ -194,58 +195,12 @@ export default function NameDetailPage() {
               </div>
             </div>
 
-            {/* Time Series Placeholder */}
+            {/* Trend Chart */}
             <div className="mb-8 animate-slide-up animation-delay-100">
-              <div className="bg-white rounded-2xl shadow-medium p-8 border border-gray-100">
-                <div className="flex items-center gap-3 mb-6">
-                  <svg className="w-6 h-6 text-secondary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-                  </svg>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-                    {t('pages:nameDetail.trends')}
-                  </h2>
-                </div>
-                <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
-                  <div className="w-16 h-16 bg-gradient-to-br from-secondary-100 to-secondary-200 rounded-full flex items-center justify-center mb-4 shadow-md">
-                    <svg className="w-8 h-8 text-secondary-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-                    </svg>
-                  </div>
-                  <p className="text-gray-500 text-lg font-medium mb-2">
-                    {t('pages:nameDetail.chartsComingSoon')}
-                  </p>
-                  <p className="text-sm text-gray-400">
-                    Data available for {data.time_series.length} years
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* By Country Placeholder */}
-            <div className="animate-slide-up animation-delay-200">
-              <div className="bg-white rounded-2xl shadow-medium p-8 border border-gray-100">
-                <div className="flex items-center gap-3 mb-6">
-                  <svg className="w-6 h-6 text-accent-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-                    {t('pages:nameDetail.distribution')}
-                  </h2>
-                </div>
-                <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
-                  <div className="w-16 h-16 bg-gradient-to-br from-accent-100 to-accent-200 rounded-full flex items-center justify-center mb-4 shadow-md">
-                    <svg className="w-8 h-8 text-accent-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                    </svg>
-                  </div>
-                  <p className="text-gray-500 text-lg font-medium mb-2">
-                    {t('pages:nameDetail.chartsComingSoon')}
-                  </p>
-                  <p className="text-sm text-gray-400">
-                    Data available for {data.by_country.length} countries
-                  </p>
-                </div>
-              </div>
+              <TrendChart
+                data={data.time_series}
+                title={t('pages:nameDetail.trends')}
+              />
             </div>
           </>
         )}
