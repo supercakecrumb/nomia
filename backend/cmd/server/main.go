@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
@@ -12,6 +13,7 @@ import (
 	"github.com/supercakecrumb/affirm-name/internal/handlers"
 	"github.com/supercakecrumb/affirm-name/internal/middleware"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 func main() {
@@ -22,8 +24,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	// 2. Initialize zap logger
-	logger, err := zap.NewProduction()
+	// 2. Initialize zap logger with human-readable format
+	loggerConfig := zap.NewDevelopmentConfig()
+	loggerConfig.EncoderConfig.TimeKey = "time"
+	loggerConfig.EncoderConfig.EncodeTime = func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
+		// Format: 2006-01-02 15:04:05.000 (with milliseconds)
+		enc.AppendString(t.UTC().Format("2006-01-02 15:04:05") + fmt.Sprintf(".%03d", t.UTC().Nanosecond()/1000000))
+	}
+	loggerConfig.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	loggerConfig.EncoderConfig.EncodeDuration = zapcore.StringDurationEncoder
+	logger, err := loggerConfig.Build()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to initialize logger: %v\n", err)
 		os.Exit(1)
