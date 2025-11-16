@@ -11,6 +11,7 @@ type Config struct {
 	Port        string
 	DatabaseURL string
 	FrontendURL string
+	LogLevel    string // debug, info, warn, error
 	DB          *db.DB // Database connection pool
 }
 
@@ -21,6 +22,7 @@ func Load() (*Config, error) {
 	viper.SetDefault("PORT", "8080")
 	viper.SetDefault("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/affirm_name?sslmode=disable")
 	viper.SetDefault("FRONTEND_URL", "http://localhost:5173")
+	viper.SetDefault("LOG_LEVEL", "info")
 
 	// Read from .env file
 	viper.SetConfigFile(".env")
@@ -39,6 +41,7 @@ func Load() (*Config, error) {
 		Port:        viper.GetString("PORT"),
 		DatabaseURL: viper.GetString("DATABASE_URL"),
 		FrontendURL: viper.GetString("FRONTEND_URL"),
+		LogLevel:    viper.GetString("LOG_LEVEL"),
 	}
 
 	return cfg, nil
