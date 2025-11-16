@@ -71,8 +71,11 @@ export default function FilterBar({
   const { data: countriesData } = useCountries();
 
   const countries = countriesData?.countries || [];
-  const minYear = metaYears?.min_year || 1880;
-  const maxYear = metaYears?.max_year || 2025;
+  
+  // Use API values when available, permissive fallbacks otherwise
+  // Using 0 and 9999 ensures no artificial restrictions until API loads
+  const minYear = metaYears?.min_year ?? 0;
+  const maxYear = metaYears?.max_year ?? 9999;
 
   return (
     <div className="bg-white rounded-2xl shadow-medium hover:shadow-strong transition-shadow duration-300 border border-gray-100">

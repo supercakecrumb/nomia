@@ -42,13 +42,13 @@ interface FilterState {
   pageSize: number;
 }
 
-export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number = 2023) => {
+export const useFilters = (defaultYearMin?: number, defaultYearMax?: number) => {
   const [searchParams, setSearchParams] = useSearchParams();
   
   // Initialize state from URL params
   const [filters, setFilters] = useState<FilterState>(() => {
-    const yearMin = parseInt(searchParams.get('year_min') || String(defaultYearMin));
-    const yearMax = parseInt(searchParams.get('year_max') || String(defaultYearMax));
+    const yearMin = parseInt(searchParams.get('year_min') || String(defaultYearMin ?? 1900));
+    const yearMax = parseInt(searchParams.get('year_max') || String(defaultYearMax ?? 2024));
     const countries = searchParams.get('countries')?.split(',').filter(Boolean) || [];
     const genderBalanceMin = parseInt(searchParams.get('gender_balance_min') || '0');
     const genderBalanceMax = parseInt(searchParams.get('gender_balance_max') || '100');
@@ -247,8 +247,8 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
   
   const resetFilters = useCallback(() => {
     setFilters({
-      yearMin: defaultYearMin,
-      yearMax: defaultYearMax,
+      yearMin: defaultYearMin ?? 1900,
+      yearMax: defaultYearMax ?? 2024,
       countries: [],
       genderBalanceMin: 0,
       genderBalanceMax: 100,

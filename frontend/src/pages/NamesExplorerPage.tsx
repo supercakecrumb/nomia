@@ -14,11 +14,17 @@ import FilterBar from '../components/filters/FilterBar';
 import NamesTable from '../components/table/NamesTable';
 import Pagination from '../components/table/Pagination';
 
+// Temporary fallbacks - permissive values until API loads
+// Using 0 and 9999 ensures no artificial data restrictions
+const TEMP_MIN_YEAR = 0;
+const TEMP_MAX_YEAR = 9999;
+
 export default function NamesExplorerPage() {
   const { t } = useTranslation('pages');
   const { data: metaYears } = useMetaYears();
   
-  // Initialize filters with meta years
+  // Use API values if available, otherwise temporary fallbacks
+  // This ensures consistent hook calls while waiting for API
   const {
     filters,
     setYearRange,
@@ -34,7 +40,10 @@ export default function NamesExplorerPage() {
     resetFilters,
     updateDerivedValues,
     getApiParams,
-  } = useFilters(metaYears?.min_year || 1880, metaYears?.max_year || 2025);
+  } = useFilters(
+    metaYears?.min_year ?? TEMP_MIN_YEAR,
+    metaYears?.max_year ?? TEMP_MAX_YEAR
+  );
   
   // Fetch names with current filters
   const { data, isLoading, error, isFetching } = useNames(getApiParams());
