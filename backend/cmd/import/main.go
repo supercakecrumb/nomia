@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"context"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -12,6 +13,16 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5"
+)
+
+// Command-line flags
+var (
+	countryCode = flag.String("country", "US", "Country code (US, UK, SE, CA)")
+	dataDir     = flag.String("dir", "../names-example", "Directory containing data files")
+	yearFrom    = flag.Int("year-from", 0, "Start year (optional, 0 means all)")
+	yearTo      = flag.Int("year-to", 0, "End year (optional, 0 means all)")
+	dryRun      = flag.Bool("dry-run", false, "Validate files without importing")
+	verbose     = flag.Bool("verbose", false, "Verbose output")
 )
 
 type NameRecord struct {
@@ -24,13 +35,36 @@ type NameRecord struct {
 }
 
 func main() {
-	fmt.Println("🚀 Starting US Name Data Import...")
+	// Parse command-line flags
+	flag.Parse()
+
+	// Display configuration
+	fmt.Println("=========================================")
+	fmt.Printf("Country: %s\n", *countryCode)
+	fmt.Printf("Data directory: %s\n", *dataDir)
+	if *yearFrom > 0 && *yearTo > 0 {
+		fmt.Printf("Year range: %d-%d\n", *yearFrom, *yearTo)
+	} else if *yearFrom > 0 {
+		fmt.Printf("Year from: %d\n", *yearFrom)
+	} else if *yearTo > 0 {
+		fmt.Printf("Year to: %d\n", *yearTo)
+	}
+	if *dryRun {
+		fmt.Println("Mode: DRY RUN (validation only)")
+	}
+	if *verbose {
+		fmt.Println("Verbose: ON")
+	}
+	fmt.Println("=========================================")
+	fmt.Println()
 
 	// Get database URL from environment
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
 		databaseURL = "postgresql://postgres:postgres@localhost:5432/affirm_name?sslmode=disable"
-		fmt.Println("⚠️  DATABASE_URL not set, using default:", databaseURL)
+		if *verbose {
+			fmt.Println("⚠️  DATABASE_URL not set, using default:", databaseURL)
+		}
 	}
 
 	// Connect to database
@@ -44,91 +78,156 @@ func main() {
 
 	fmt.Println("✅ Connected to database")
 
-	// Ensure US country exists
-	countryID, err := ensureUSCountry(ctx, conn)
+	// Ensure country exists
+	countryID, err := ensureCountry(ctx, conn, *countryCode)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "❌ Failed to ensure US country: %v\n", err)
+		fmt.Fprintf(os.Stderr, "❌ Failed to ensure %s country: %v\n", *countryCode, err)
 		os.Exit(1)
 	}
-	fmt.Printf("✅ US country ID: %d\n", countryID)
+	if *verbose {
+		fmt.Printf("✅ %s country ID: %d\n", *countryCode, countryID)
+	}
 
-	// Find all SSA data files in names-example directory (at project root)
-	dataDir := "../names-example"
-	files, err := filepath.Glob(filepath.Join(dataDir, "yob*.txt"))
+	// Find all data files in specified directory
+	var filePattern string
+	switch *countryCode {
+	case "US":
+		filePattern = "yob*.txt"
+	case "UK":
+		filePattern = "*.xlsx"
+	case "SE":
+		filePattern = "*.xlsx"
+	case "CA":
+		filePattern = "*.csv"
+	default:
+		filePattern = "*.txt"
+	}
+
+	files, err := filepath.Glob(filepath.Join(*dataDir, filePattern))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "❌ Failed to find data files: %v\n", err)
 		os.Exit(1)
 	}
 
 	if len(files) == 0 {
-		fmt.Fprintf(os.Stderr, "❌ No data files found in %s\n", dataDir)
+		fmt.Fprintf(os.Stderr, "❌ No data files found in %s with pattern %s\n", *dataDir, filePattern)
 		os.Exit(1)
 	}
 
 	fmt.Printf("📂 Found %d data files\n", len(files))
 
+	if *dryRun {
+		fmt.Println("\n🔍 DRY RUN - Validating files only:")
+	}
+
 	// Process each file
 	totalRecords := 0
+	filesProcessed := 0
 	for _, filePath := range files {
-		fmt.Printf("\n📄 Processing %s...\n", filepath.Base(filePath))
+		if *verbose {
+			fmt.Printf("\n📄 Processing %s...\n", filepath.Base(filePath))
+		} else {
+			fmt.Printf(".")
+		}
 
 		// Extract year from filename
 		year, err := extractYearFromFilename(filepath.Base(filePath))
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "⚠️  Skipping file %s: %v\n", filePath, err)
+			if *verbose {
+				fmt.Fprintf(os.Stderr, "⚠️  Skipping file %s: %v\n", filePath, err)
+			}
+			continue
+		}
+
+		// Filter by year range if specified
+		if *yearFrom > 0 && year < *yearFrom {
+			if *verbose {
+				fmt.Printf("⏭️  Skipping year %d (before range)\n", year)
+			}
+			continue
+		}
+		if *yearTo > 0 && year > *yearTo {
+			if *verbose {
+				fmt.Printf("⏭️  Skipping year %d (after range)\n", year)
+			}
+			continue
+		}
+
+		// In dry-run mode, just validate the file
+		if *dryRun {
+			_, err := parseSSAFile(filePath, year, countryID, 0)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "\n❌ Validation failed for %s: %v\n", filepath.Base(filePath), err)
+			} else if *verbose {
+				fmt.Printf("✅ Validated %s\n", filepath.Base(filePath))
+			}
 			continue
 		}
 
 		// Check if dataset already exists
 		exists, err := datasetExists(ctx, conn, countryID, year, filepath.Base(filePath))
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "❌ Failed to check dataset: %v\n", err)
+			fmt.Fprintf(os.Stderr, "\n❌ Failed to check dataset: %v\n", err)
 			continue
 		}
 		if exists {
-			fmt.Printf("⏭️  Dataset for year %d already exists, skipping\n", year)
+			if *verbose {
+				fmt.Printf("⏭️  Dataset for year %d already exists, skipping\n", year)
+			}
 			continue
 		}
 
 		// Create dataset record
 		datasetID, err := insertDataset(ctx, conn, countryID, year, filepath.Base(filePath), filePath)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "❌ Failed to create dataset: %v\n", err)
+			fmt.Fprintf(os.Stderr, "\n❌ Failed to create dataset: %v\n", err)
 			continue
 		}
-		fmt.Printf("✅ Created dataset ID: %d for year %d\n", datasetID, year)
+		if *verbose {
+			fmt.Printf("✅ Created dataset ID: %d for year %d\n", datasetID, year)
+		}
 
 		// Parse file
 		records, err := parseSSAFile(filePath, year, countryID, datasetID)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "❌ Failed to parse file: %v\n", err)
+			fmt.Fprintf(os.Stderr, "\n❌ Failed to parse file: %v\n", err)
 			continue
 		}
-		fmt.Printf("📊 Parsed %d records\n", len(records))
+		if *verbose {
+			fmt.Printf("📊 Parsed %d records\n", len(records))
+		}
 
 		// Batch insert records
 		err = batchInsertNames(ctx, conn, records)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "❌ Failed to insert records: %v\n", err)
+			fmt.Fprintf(os.Stderr, "\n❌ Failed to insert records: %v\n", err)
 			continue
 		}
 
 		totalRecords += len(records)
-		fmt.Printf("✅ Imported %d records for year %d\n", len(records), year)
+		filesProcessed++
+		if *verbose {
+			fmt.Printf("✅ Imported %d records for year %d\n", len(records), year)
+		}
 	}
 
-	fmt.Printf("\n🎉 Import complete! Total records imported: %d\n", totalRecords)
+	fmt.Println()
+	if *dryRun {
+		fmt.Printf("\n🎉 Validation complete! Checked %d files\n", filesProcessed)
+	} else {
+		fmt.Printf("\n🎉 Import complete! Processed %d files, imported %d records\n", filesProcessed, totalRecords)
+	}
 }
 
-// ensureUSCountry ensures the US country record exists and returns its ID
-func ensureUSCountry(ctx context.Context, conn *pgx.Conn) (int, error) {
+// ensureCountry ensures the specified country record exists and returns its ID
+func ensureCountry(ctx context.Context, conn *pgx.Conn, code string) (int, error) {
 	var countryID int
 	err := conn.QueryRow(ctx, `
-		SELECT id FROM countries WHERE code = 'US'
-	`).Scan(&countryID)
+		SELECT id FROM countries WHERE code = $1
+	`, code).Scan(&countryID)
 
 	if err != nil {
-		return 0, fmt.Errorf("US country not found in database. Please run migrations first")
+		return 0, fmt.Errorf("%s country not found in database. Please run migrations first", code)
 	}
 
 	return countryID, nil
