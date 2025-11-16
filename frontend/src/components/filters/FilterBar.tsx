@@ -12,7 +12,8 @@ import { useCountries } from '../../hooks/useCountries';
 import YearRangeSlider from './YearRangeSlider';
 import CountriesDropdown from './CountriesDropdown';
 import GenderBalanceSlider from './GenderBalanceSlider';
-import PopularityFilterTrio from './PopularityFilterTrio';
+// TODO: Phase 2 - Uncomment when popularity filter is re-enabled
+// import PopularityFilterTrio from './PopularityFilterTrio';
 
 interface FilterBarProps {
   // Year range
@@ -29,18 +30,20 @@ interface FilterBarProps {
   genderBalanceMax: number;
   onGenderBalanceChange: (min: number, max: number) => void;
   
-  // Popularity trio
-  minCount: number | null;
-  topN: number | null;
-  coveragePercent: number | null;
-  popularityDriver: 'min_count' | 'top_n' | 'coverage_percent' | null;
-  onMinCountChange: (value: number | null) => void;
-  onTopNChange: (value: number | null) => void;
-  onCoveragePercentChange: (value: number | null) => void;
+  // TODO: Phase 2 - Add back popularity trio filters
+  // Requires backend optimization to handle <500ms response times
+  // minCount: number | null;
+  // topN: number | null;
+  // coveragePercent: number | null;
+  // popularityDriver: 'min_count' | 'top_n' | 'coverage_percent' | null;
+  // onMinCountChange: (value: number | null) => void;
+  // onTopNChange: (value: number | null) => void;
+  // onCoveragePercentChange: (value: number | null) => void;
   
-  // Name search
-  nameSearch: string;
-  onNameSearchChange: (value: string) => void;
+  // TODO: Phase 2 - Add name search with glob pattern support
+  // Backend needs to implement efficient name matching
+  // nameSearch: string;
+  // onNameSearchChange: (value: string) => void;
   
   // Actions
   onReset: () => void;
@@ -55,15 +58,15 @@ export default function FilterBar({
   genderBalanceMin,
   genderBalanceMax,
   onGenderBalanceChange,
-  minCount,
-  topN,
-  coveragePercent,
-  popularityDriver,
-  onMinCountChange,
-  onTopNChange,
-  onCoveragePercentChange,
-  nameSearch,
-  onNameSearchChange,
+  // minCount,
+  // topN,
+  // coveragePercent,
+  // popularityDriver,
+  // onMinCountChange,
+  // onTopNChange,
+  // onCoveragePercentChange,
+  // nameSearch,
+  // onNameSearchChange,
   onReset,
 }: FilterBarProps) {
   const { t } = useTranslation('filters');
@@ -117,7 +120,9 @@ export default function FilterBar({
           />
         </div>
 
-        {/* Popularity Trio - Full Width */}
+        {/* TODO: Phase 2 - Popularity Trio Filters
+            Uncomment when backend is optimized (<500ms response times)
+            
         <div className="pb-4 border-b border-gray-100">
           <PopularityFilterTrio
             minCount={minCount}
@@ -129,8 +134,11 @@ export default function FilterBar({
             onCoveragePercentChange={onCoveragePercentChange}
           />
         </div>
+        */}
 
-        {/* Name Search */}
+        {/* TODO: Phase 2 - Name Search
+            Uncomment when backend implements efficient glob pattern search
+            
         <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
             <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -152,6 +160,7 @@ export default function FilterBar({
             Supports glob patterns: *, ?
           </p>
         </div>
+        */}
 
         {/* Action Buttons */}
         <div className="pt-4 flex gap-3">

@@ -30,15 +30,16 @@ export default function NamesExplorerPage() {
     setYearRange,
     setCountries,
     setGenderBalance,
-    setMinCount,
-    setTopN,
-    setCoveragePercent,
-    setSearch,
     setSort,
     setPage,
     setPageSize,
     resetFilters,
-    updateDerivedValues,
+    // TODO: Phase 2 - Uncomment when popularity/search filters are re-enabled
+    // setMinCount,
+    // setTopN,
+    // setCoveragePercent,
+    // setSearch,
+    // updateDerivedValues,
     getApiParams,
   } = useFilters(
     metaYears?.min_year ?? TEMP_MIN_YEAR,
@@ -47,6 +48,14 @@ export default function NamesExplorerPage() {
   
   // Fetch names with current filters
   const { data, isLoading, error, isFetching } = useNames(getApiParams());
+
+  // Update year range when API meta data loads
+  useEffect(() => {
+    if (metaYears && (filters.yearMin === TEMP_MIN_YEAR || filters.yearMax === TEMP_MAX_YEAR)) {
+      // Only update if still using temporary fallbacks
+      setYearRange(metaYears.min_year, metaYears.max_year);
+    }
+  }, [metaYears, filters.yearMin, filters.yearMax, setYearRange]);
 
   // Debug logging for API response
   useEffect(() => {
@@ -63,13 +72,14 @@ export default function NamesExplorerPage() {
     }
   }, [data]);
 
+  // TODO: Phase 2 - Re-enable when popularity filters are added back
   // Update derived popularity values when API response changes
-  useEffect(() => {
-    if (data?.meta?.popularity_summary) {
-      const { derived_min_count, derived_top_n, derived_coverage_percent } = data.meta.popularity_summary;
-      updateDerivedValues(derived_min_count, derived_top_n, derived_coverage_percent);
-    }
-  }, [data, updateDerivedValues]);
+  // useEffect(() => {
+  //   if (data?.meta?.popularity_summary) {
+  //     const { derived_min_count, derived_top_n, derived_coverage_percent } = data.meta.popularity_summary;
+  //     updateDerivedValues(derived_min_count, derived_top_n, derived_coverage_percent);
+  //   }
+  // }, [data, updateDerivedValues]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -112,17 +122,19 @@ export default function NamesExplorerPage() {
             genderBalanceMin={filters.genderBalanceMin}
             genderBalanceMax={filters.genderBalanceMax}
             onGenderBalanceChange={setGenderBalance}
-            minCount={filters.minCount}
-            topN={filters.topN}
-            coveragePercent={filters.coveragePercent}
-            popularityDriver={filters.popularityDriver}
-            onMinCountChange={setMinCount}
-            onTopNChange={setTopN}
-            onCoveragePercentChange={setCoveragePercent}
-            nameSearch={filters.search}
-            onNameSearchChange={setSearch}
             onReset={resetFilters}
           />
+          {/* TODO: Phase 2 - Add back popularity and search props when implemented
+          minCount={filters.minCount}
+          topN={filters.topN}
+          coveragePercent={filters.coveragePercent}
+          popularityDriver={filters.popularityDriver}
+          onMinCountChange={setMinCount}
+          onTopNChange={setTopN}
+          onCoveragePercentChange={setCoveragePercent}
+          nameSearch={filters.search}
+          onNameSearchChange={setSearch}
+          */}
         </div>
 
         {/* Names Table */}
