@@ -30,7 +30,7 @@ i18n
     
     // React specific options
     react: {
-      useSuspense: false,
+      useSuspense: true,
     },
   });
 

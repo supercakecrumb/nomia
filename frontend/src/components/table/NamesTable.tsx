@@ -210,14 +210,6 @@ export default function NamesTable({
               <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  Period
-                </div>
-              </th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   Countries
@@ -264,14 +256,6 @@ export default function NamesTable({
                       maleCount={name.male_count}
                       hasUnknownData={name.has_unknown_data}
                     />
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center gap-1 text-sm text-gray-700 font-medium">
-                    <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    {formatYearRange(name.name_start, name.name_end)}
                   </div>
                 </td>
                 <td className="px-6 py-4">
@@ -326,28 +310,17 @@ export default function NamesTable({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Period</p>
-                  <p className="text-gray-900 font-medium flex items-center gap-1">
-                    <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    {formatYearRange(name.name_start, name.name_end)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Countries</p>
-                  <div className="flex flex-wrap gap-1">
-                    {name.countries.map((country) => (
-                      <span
-                        key={country}
-                        className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-gradient-to-r from-secondary-100 to-secondary-200 text-secondary-800"
-                      >
-                        {country}
-                      </span>
-                    ))}
-                  </div>
+              <div>
+                <p className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Countries</p>
+                <div className="flex flex-wrap gap-1">
+                  {name.countries.map((country) => (
+                    <span
+                      key={country}
+                      className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-gradient-to-r from-secondary-100 to-secondary-200 text-secondary-800"
+                    >
+                      {country}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
