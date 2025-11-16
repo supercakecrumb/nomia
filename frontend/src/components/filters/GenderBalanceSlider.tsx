@@ -57,11 +57,6 @@ export default function GenderBalanceSlider({
             },
           ]}
           railStyle={{ backgroundColor: '#e5e7eb', height: 6 }}
-          marks={{
-            0: { style: { color: '#ec4899', fontWeight: 600, fontSize: '11px' }, label: '♀' },
-            50: { style: { color: '#8b5cf6', fontWeight: 600, fontSize: '11px' }, label: '⚥' },
-            100: { style: { color: '#3b82f6', fontWeight: 600, fontSize: '11px' }, label: '♂' },
-          }}
         />
       </div>
 
