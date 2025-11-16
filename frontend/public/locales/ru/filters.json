@@ -1,0 +1,71 @@
+{
+  "title": "Фильтры",
+  "yearRange": {
+    "label": "Диапазон лет",
+    "from": "С",
+    "to": "По",
+    "placeholder": "Выберите год",
+    "currentRange": "{{min}} - {{max}}"
+  },
+  "countries": {
+    "label": "Страны",
+    "placeholder": "Выберите страны",
+    "all": "Все страны",
+    "selected": "Страны ({{count}})",
+    "selectedWithFlags": "{{flags}} +{{count}}"
+  },
+  "genderBalance": {
+    "label": "Гендерный баланс",
+    "male": "Мужской",
+    "female": "Женский",
+    "neutral": "Нейтральный",
+    "any": "Любой",
+    "moreFemale": "Больше женский",
+    "moreMale": "Больше мужской",
+    "range": "{{min}}% - {{max}}%"
+  },
+  "popularity": {
+    "label": "Фильтры популярности",
+    "minCount": {
+      "label": "Мин. количество",
+      "placeholder": "Минимум случаев",
+      "active": "Активный: Мин. количество"
+    },
+    "topN": {
+      "label": "Топ N",
+      "placeholder": "Топ имен",
+      "active": "Активный: Топ N"
+    },
+    "coveragePercent": {
+      "label": "Охват %",
+      "placeholder": "% популяции",
+      "active": "Активный: Охват %"
+    },
+    "activeDriver": "Активный: {{driver}} = {{value}}",
+    "derived": "Производный: {{value}}"
+  },
+  "nameSearch": {
+    "label": "Поиск имени",
+    "placeholder": "Поиск по имени..."
+  },
+  "sort": {
+    "label": "Сортировка",
+    "order": "Порядок сортировки",
+    "ascending": "По возрастанию",
+    "descending": "По убыванию",
+    "clickToSort": "Нажмите для сортировки",
+    "sortedAsc": "Отсортировано по возрастанию",
+    "sortedDesc": "Отсортировано по убыванию",
+    "options": {
+      "rank": "Ранг",
+      "name": "Имя",
+      "totalCount": "Общее количество",
+      "genderBalance": "Гендерный баланс",
+      "countries": "Страны"
+    }
+  },
+  "actions": {
+    "reset": "Сбросить",
+    "apply": "Применить фильтры"
+  }
+}

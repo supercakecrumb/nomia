@@ -18,6 +18,30 @@ _Data-grounded name exploration for people who need their name to reflect who th
 
 ---
 
+## Quick Project Status
+
+**✅ DONE (Phase 1 - MVP)**
+- [x] Frontend setup (React 19 + TypeScript + Vite)
+- [x] Year range, countries, gender balance filters
+- [x] Sortable names table with pagination
+- [x] English/Russian i18n support
+- [x] URL state synchronization
+- [x] Performance optimizations for slow backend
+- [x] Mock and real API modes
+
+**🚧 TODO (Frontend)**
+- [ ] Re-enable popularity filters (when backend <500ms)
+- [ ] Re-enable name search (when backend implements glob patterns)
+- [ ] Name Detail Page - interactive trend chart
+- [ ] Main Landing Page - hero section
+- [ ] Loading skeletons
+- [ ] Mobile responsiveness polish
+- [ ] Accessibility improvements
+- [ ] Export results (CSV/JSON)
+- [ ] Dark mode
+
+---
+
 ## Why the Project Exists
 
 In many countries, name changes are constrained by gendered policy, cultural norms, or bureaucratic expectations. To avoid administrative pushback, trans people often need names that:

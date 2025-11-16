@@ -1,0 +1,31 @@
+{
+  "appName": "Affirm Name",
+  "navigation": {
+    "main": "Main",
+    "exploreNames": "Explore Names"
+  },
+  "buttons": {
+    "search": "Search",
+    "reset": "Reset",
+    "apply": "Apply"
+  },
+  "labels": {
+    "loading": "Loading...",
+    "error": "Error",
+    "noResults": "No results found",
+    "language": "Language"
+  },
+  "languages": {
+    "en": "English",
+    "ru": "Russian"
+  },
+  "pagination": {
+    "showing": "Showing",
+    "to": "to",
+    "of": "of",
+    "results": "results",
+    "page": "Page",
+    "previous": "Previous",
+    "next": "Next"
+  }
+}
