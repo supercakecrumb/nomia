@@ -21,5 +21,21 @@
   "nameSearch": {
     "label": "Name Search",
     "placeholder": "Search by name..."
+  },
+  "sort": {
+    "label": "Sort By",
+    "order": "Sort Order",
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "options": {
+      "rank": "Rank",
+      "name": "Name",
+      "totalCount": "Total Count",
+      "genderBalance": "Gender Balance"
+    }
+  },
+  "actions": {
+    "reset": "Reset",
+    "apply": "Apply Filters"
   }
 }

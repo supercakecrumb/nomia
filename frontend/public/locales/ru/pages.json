@@ -33,6 +33,10 @@
       "popularity": "Популярности",
       "alphabetical": "Алфавиту",
       "recent": "Недавним"
+    },
+    "emptyState": {
+      "title": "Имена не найдены",
+      "description": "Попробуйте изменить фильтры или критерии поиска"
     }
   },
   "nameDetail": {

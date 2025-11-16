@@ -33,6 +33,10 @@
       "popularity": "Popularity",
       "alphabetical": "Alphabetical",
       "recent": "Most Recent"
+    },
+    "emptyState": {
+      "title": "No Names Found",
+      "description": "Try adjusting your filters or search criteria"
     }
   },
   "nameDetail": {
