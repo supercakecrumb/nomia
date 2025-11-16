@@ -16,6 +16,37 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+// initLogger creates a zap logger with the specified log level
+func initLogger(logLevel string) (*zap.Logger, error) {
+	// Parse log level
+	var level zapcore.Level
+	switch logLevel {
+	case "debug":
+		level = zapcore.DebugLevel
+	case "info":
+		level = zapcore.InfoLevel
+	case "warn":
+		level = zapcore.WarnLevel
+	case "error":
+		level = zapcore.ErrorLevel
+	default:
+		level = zapcore.InfoLevel
+	}
+
+	// Create config
+	loggerConfig := zap.NewDevelopmentConfig()
+	loggerConfig.Level = zap.NewAtomicLevelAt(level)
+	loggerConfig.EncoderConfig.TimeKey = "time"
+	loggerConfig.EncoderConfig.EncodeTime = func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
+		// Format: 2006-01-02 15:04:05.000 (with milliseconds, UTC, no timezone)
+		enc.AppendString(t.UTC().Format("2006-01-02 15:04:05") + fmt.Sprintf(".%03d", t.UTC().Nanosecond()/1000000))
+	}
+	loggerConfig.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	loggerConfig.EncoderConfig.EncodeDuration = zapcore.StringDurationEncoder
+
+	return loggerConfig.Build()
+}
+
 func main() {
 	// 1. Load config
 	cfg, err := config.Load()
