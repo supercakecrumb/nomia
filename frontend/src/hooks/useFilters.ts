@@ -106,9 +106,15 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
     if (filters.countries.length > 0) params.set('countries', filters.countries.join(','));
     if (debouncedGenderBalanceMin !== 0) params.set('gender_balance_min', String(debouncedGenderBalanceMin));
     if (debouncedGenderBalanceMax !== 100) params.set('gender_balance_max', String(debouncedGenderBalanceMax));
-    if (debouncedMinCount !== null) params.set('min_count', String(debouncedMinCount));
-    if (debouncedTopN !== null) params.set('top_n', String(debouncedTopN));
-    if (debouncedCoveragePercent !== null) params.set('coverage_percent', String(debouncedCoveragePercent));
+    
+    // Only add the active driver to URL, not derived values
+    if (filters.popularityDriver === 'min_count' && debouncedMinCount !== null) {
+      params.set('min_count', String(debouncedMinCount));
+    } else if (filters.popularityDriver === 'top_n' && debouncedTopN !== null) {
+      params.set('top_n', String(debouncedTopN));
+    } else if (filters.popularityDriver === 'coverage_percent' && debouncedCoveragePercent !== null) {
+      params.set('coverage_percent', String(debouncedCoveragePercent));
+    }
     if (filters.search) params.set('search', filters.search);
     if (filters.sortBy) params.set('sort_by', filters.sortBy);
     if (filters.sortOrder) params.set('sort_order', filters.sortOrder);
@@ -147,9 +153,15 @@ export const useFilters = (defaultYearMin: number = 1880, defaultYearMax: number
     if (filters.countries.length > 0) params.countries = filters.countries;
     if (debouncedGenderBalanceMin !== 0) params.gender_balance_min = debouncedGenderBalanceMin;
     if (debouncedGenderBalanceMax !== 100) params.gender_balance_max = debouncedGenderBalanceMax;
-    if (debouncedMinCount !== null) params.min_count = debouncedMinCount;
-    if (debouncedTopN !== null) params.top_n = debouncedTopN;
-    if (debouncedCoveragePercent !== null) params.coverage_percent = debouncedCoveragePercent;
+    
+    // IMPORTANT: Only send the active driver, not all three
+    if (filters.popularityDriver === 'min_count' && debouncedMinCount !== null) {
+      params.min_count = debouncedMinCount;
+    } else if (filters.popularityDriver === 'top_n' && debouncedTopN !== null) {
+      params.top_n = debouncedTopN;
+    } else if (filters.popularityDriver === 'coverage_percent' && debouncedCoveragePercent !== null) {
+      params.coverage_percent = debouncedCoveragePercent;
+    }
     if (filters.search) params.search = filters.search;
     if (filters.sortBy) params.sort_by = filters.sortBy;
     if (filters.sortOrder) params.sort_order = filters.sortOrder;

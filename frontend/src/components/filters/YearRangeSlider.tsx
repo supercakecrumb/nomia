@@ -2,7 +2,7 @@
  * YearRangeSlider Component
  * 
  * Dual-handle range slider for selecting year range.
- * Shows min/max values from useMetaYears (e.g., 1880-2023).
+ * Shows min/max values from useMetaYears (e.g., 1880-2024).
  */
 
 import { useTranslation } from 'react-i18next';

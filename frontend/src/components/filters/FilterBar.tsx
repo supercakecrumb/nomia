@@ -72,7 +72,7 @@ export default function FilterBar({
 
   const countries = countriesData?.countries || [];
   const minYear = metaYears?.min_year || 1880;
-  const maxYear = metaYears?.max_year || 2023;
+  const maxYear = metaYears?.max_year || 2025;
 
   return (
     <div className="bg-white rounded-2xl shadow-medium hover:shadow-strong transition-shadow duration-300 border border-gray-100">
