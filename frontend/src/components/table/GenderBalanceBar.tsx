@@ -6,6 +6,7 @@
  */
 
 import { formatPercentage } from '../../utils/formatters';
+import { useTranslation } from 'react-i18next';
 
 interface GenderBalanceBarProps {
   /** Gender balance value (0–100, where 0 = 100% female, 100 = 100% male) */
@@ -25,16 +26,17 @@ function clampPercent(value: number): number {
 
 export default function GenderBalanceBar({
   genderBalance,
-  femaleCount,
-  maleCount,
+  femaleCount: _femaleCount,
+  maleCount: _maleCount,
   hasUnknownData = false,
 }: GenderBalanceBarProps) {
+  const { t } = useTranslation('filters');
   // Handle null/unknown gender balance
   if (genderBalance === null || hasUnknownData) {
     return (
       <div className="flex items-center gap-2">
         <div className="flex-1 h-7 rounded-full bg-gradient-to-r from-gray-200 to-gray-300 shadow-sm flex items-center justify-center">
-          <span className="text-xs text-gray-600 font-semibold">Unknown</span>
+          <span className="text-xs text-gray-600 font-semibold">{t('filters:genderBalanceBar.unknown')}</span>
         </div>
       </div>
     );
@@ -110,7 +112,7 @@ export default function GenderBalanceBar({
           style={{ backgroundColor: '#FFE5F0' }}
         >
           <span className="font-bold" style={{ color: '#D9006C' }}>
-            ♀
+            {t('filters:genderBalanceBar.femaleSymbol')}
           </span>
           <span className="font-semibold" style={{ color: '#A60052' }}>
             {formatPercentage(femalePercent, 0)}
@@ -121,7 +123,7 @@ export default function GenderBalanceBar({
           className="px-3 py-1.5 rounded-xl font-medium"
           style={{ backgroundColor: '#F5F0FF', color: '#8B6FBD' }}
         >
-          Neutral
+          {t('filters:genderBalanceBar.neutralLabel')}
         </div>
 
         <div
@@ -129,7 +131,7 @@ export default function GenderBalanceBar({
           style={{ backgroundColor: '#E5F2FF' }}
         >
           <span className="font-bold" style={{ color: '#006CD9' }}>
-            ♂
+            {t('filters:genderBalanceBar.maleSymbol')}
           </span>
           <span className="font-semibold" style={{ color: '#0052A6' }}>
             {formatPercentage(malePercent, 0)}

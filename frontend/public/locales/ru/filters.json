@@ -24,6 +24,12 @@
     "moreMale": "Больше мужской",
     "range": "{{min}}% - {{max}}%"
   },
+  "genderBalanceBar": {
+    "unknown": "Неизвестно",
+    "femaleSymbol": "♀",
+    "maleSymbol": "♂",
+    "neutralLabel": "Нейтральный"
+  },
   "popularity": {
     "label": "Фильтры популярности",
     "minCount": {
@@ -42,7 +48,8 @@
       "active": "Активный: Охват %"
     },
     "activeDriver": "Активный: {{driver}} = {{value}}",
-    "derived": "Производный: {{value}}"
+    "derived": "Производный: {{value}}",
+    "activeDescription": "Активный фильтр: {{driver}} • Другие значения выводятся из результатов"
   },
   "nameSearch": {
     "label": "Поиск имени",

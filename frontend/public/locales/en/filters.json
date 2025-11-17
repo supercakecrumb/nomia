@@ -24,6 +24,12 @@
     "moreMale": "More Male",
     "range": "{{min}}% - {{max}}%"
   },
+  "genderBalanceBar": {
+    "unknown": "Unknown",
+    "femaleSymbol": "♀",
+    "maleSymbol": "♂",
+    "neutralLabel": "Neutral"
+  },
   "popularity": {
     "label": "Popularity Filters",
     "minCount": {
@@ -42,7 +48,8 @@
       "active": "Active: Coverage %"
     },
     "activeDriver": "Active: {{driver}} = {{value}}",
-    "derived": "Derived: {{value}}"
+    "derived": "Derived: {{value}}",
+    "activeDescription": "Active filter: {{driver}} • Other values are derived from results"
   },
   "nameSearch": {
     "label": "Name Search",

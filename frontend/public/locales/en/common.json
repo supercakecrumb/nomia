@@ -26,6 +26,14 @@
     "results": "results",
     "page": "Page",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "pageSize": {
+      "label": "Items per page",
+      "options": {
+        "20": "20 per page",
+        "50": "50 per page",
+        "100": "100 per page"
+      }
+    }
   }
 }
