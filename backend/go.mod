@@ -1,4 +1,4 @@
-module github.com/supercakecrumb/nomia
+module github.com/supercakecrumb/affirm-name
 
 go 1.25.3
 

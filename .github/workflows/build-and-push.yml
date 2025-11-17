@@ -30,8 +30,8 @@ jobs:
           context: ./backend
           push: true
           tags: |
-            ghcr.io/supercakecrumb/nomia/backend:latest
-            ghcr.io/supercakecrumb/nomia/backend:${{ github.ref_name }}
+            ghcr.io/supercakecrumb/affirm-name/backend:latest
+            ghcr.io/supercakecrumb/affirm-name/backend:${{ github.ref_name }}
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
@@ -39,5 +39,5 @@ jobs:
           context: ./frontend
           push: true
           tags: |
-            ghcr.io/supercakecrumb/nomia/frontend:latest
-            ghcr.io/supercakecrumb/nomia/frontend:${{ github.ref_name }}
+            ghcr.io/supercakecrumb/affirm-name/frontend:latest
+            ghcr.io/supercakecrumb/affirm-name/frontend:${{ github.ref_name }}
