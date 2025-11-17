@@ -8,7 +8,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import type { NameEntry } from '../../types/api';
-import { formatNumber, formatYearRange } from '../../utils/formatters';
+import { formatNumber } from '../../utils/formatters';
 import GenderBalanceBar from './GenderBalanceBar';
 import { getNameDetailPath } from '../../utils/navigation';
 
@@ -158,7 +158,7 @@ export default function NamesTable({
                   <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
                   </svg>
-                  Rank
+                  {t('pages:namesTable.rank')}
                   {onSortChange && getSortIcon('rank')}
                 </button>
               </th>
@@ -173,7 +173,7 @@ export default function NamesTable({
                   <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
-                  Name
+                  {t('pages:namesTable.name')}
                   {onSortChange && getSortIcon('name')}
                 </button>
               </th>
@@ -188,7 +188,7 @@ export default function NamesTable({
                   <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
-                  Total Count
+                  {t('pages:namesTable.totalCount')}
                   {onSortChange && getSortIcon('total_count')}
                 </button>
               </th>
@@ -203,7 +203,7 @@ export default function NamesTable({
                   <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
                   </svg>
-                  Gender Balance
+                  {t('pages:namesTable.genderBalance')}
                   {onSortChange && getSortIcon('gender_balance')}
                 </button>
               </th>
@@ -212,7 +212,7 @@ export default function NamesTable({
                   <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  Countries
+                  {t('pages:namesTable.countries')}
                 </div>
               </th>
             </tr>
@@ -293,15 +293,16 @@ export default function NamesTable({
                     <div className="w-6 h-6 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-md flex items-center justify-center">
                       <span className="text-xs font-bold text-primary-700">#{name.rank}</span>
                     </div>
+                    <span>{t('pages:namesTable.mobile.rankLabel')}:</span>
                   </div>
-                  <span className="font-medium">{formatNumber(name.total_count)} total</span>
+                  <span className="font-medium">{formatNumber(name.total_count)} {t('pages:namesTable.mobile.totalLabel')}</span>
                 </div>
               </div>
             </div>
 
             <div className="space-y-4">
               <div>
-                <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Gender Balance</p>
+                <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">{t('pages:namesTable.genderBalance')}</p>
                 <GenderBalanceBar
                   genderBalance={name.gender_balance}
                   femaleCount={name.female_count}
@@ -311,7 +312,7 @@ export default function NamesTable({
               </div>
 
               <div>
-                <p className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Countries</p>
+                <p className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">{t('pages:namesTable.countries')}</p>
                 <div className="flex flex-wrap gap-1">
                   {name.countries.map((country) => (
                     <span

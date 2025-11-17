@@ -53,5 +53,16 @@
     "relatedNames": "Related Names",
     "meaning": "Meaning",
     "origin": "Origin"
+  },
+  "namesTable": {
+    "rank": "Rank",
+    "name": "Name",
+    "totalCount": "Total Count",
+    "genderBalance": "Gender Balance",
+    "countries": "Countries",
+    "mobile": {
+      "rankLabel": "Rank",
+      "totalLabel": "total"
+    }
   }
 }

@@ -38,7 +38,7 @@ export default function Pagination({
   const canGoPrevious = currentPage > 1;
   const canGoNext = currentPage < totalPages;
 
-  const pageSizeOptions = [20, 50, 100, 200];
+  const pageSizeOptions = [20, 50, 100];
 
   return (
     <div className="bg-white rounded-2xl shadow-medium border border-gray-100 overflow-hidden">
@@ -68,7 +68,7 @@ export default function Pagination({
               >
                 {pageSizeOptions.map((size) => (
                   <option key={size} value={size}>
-                    {size} per page
+                    {t(`common:pagination.pageSize.options.${size}`)}
                   </option>
                 ))}
               </select>

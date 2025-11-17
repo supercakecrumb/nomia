@@ -53,5 +53,16 @@
     "relatedNames": "Похожие имена",
     "meaning": "Значение",
     "origin": "Происхождение"
+  },
+  "namesTable": {
+    "rank": "Ранг",
+    "name": "Имя",
+    "totalCount": "Общее количество",
+    "genderBalance": "Гендерный баланс",
+    "countries": "Страны",
+    "mobile": {
+      "rankLabel": "Ранг",
+      "totalLabel": "всего"
+    }
   }
 }
