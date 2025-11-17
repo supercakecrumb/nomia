@@ -49,36 +49,58 @@ curl "http://localhost:8080/api/names?page=1&page_size=10"
 curl "http://localhost:8080/api/names/trend?name=Oliver"
 ```
 
-## GitHub Actions Deployment
+## GitHub Actions CI/CD Pipelines
 
-### 1. Configure GitHub Secrets
+The project uses GitHub Actions for building, releasing, and deploying the application.
 
-Go to your repository → Settings → Secrets and add:
+### Workflows
 
-- `DB_PASSWORD`: Production database password
-- `FRONTEND_URL`: Production frontend URL
-- Additional secrets for your deployment method (SSH keys, API tokens, etc.)
+1. **Build and Push Workflow** (`.github/workflows/build-and-push.yml`):
+   - Triggered on push to `main` branch or when a tag is pushed (tags matching `v*`)
+   - Builds Docker images for backend and frontend
+   - Pushes images to GitHub Container Registry (ghcr.io) with two tags: `latest` and the git tag (e.g., `v1.0.0`)
 
-### 2. Deployment Workflow
+2. **Release Workflow** (`.github/workflows/release.yml`):
+   - Triggered when a tag is pushed (tags matching `v*`)
+   - Generates a changelog from the commits since the last tag
+   - Creates a GitHub release with the changelog as release notes
 
-The deployment workflow (`.github/workflows/deploy.yml`) automatically:
+3. **Deployment Workflow** (`.github/workflows/deploy.yml`):
+   - Manual trigger (workflow_dispatch) with input for the tag to deploy
+   - Connects to the production server via SSH
+   - Pulls the specified version of the images
+   - Restarts the services using `docker-compose.prod.yml`
 
-**On push to main:**
-- Builds Docker image
-- Pushes to GitHub Container Registry
-- Deploys to staging environment
+### Required GitHub Secrets
 
-**On release:**
-- Builds Docker image
-- Pushes to GitHub Container Registry with version tag
-- Deploys to production environment
+Configure the following secrets in your GitHub repository (Settings → Secrets and variables → Actions):
 
-### 3. Manual Deployment
+- `SSH_HOST`: The hostname or IP address of your production server
+- `SSH_USER`: The SSH username for the production server
+- `SSH_PRIVATE_KEY`: The private key for SSH authentication (without passphrase)
 
-Trigger manual deployment:
-```bash
-gh workflow run deploy.yml
-```
+### Production Server Setup for GitHub Actions Deployment
+
+1. **Docker and Docker Compose**: Ensure Docker and Docker Compose are installed on the server.
+2. **Directory Setup**: Create a directory for the project (e.g., `/opt/affirm-name`) and place the `docker-compose.prod.yml` file there.
+3. **Environment Variables**: Create a `.env` file in the project directory with the required environment variables (see `backend/.env.example` for reference). At minimum, set:
+   - `DB_PASSWORD`: A strong password for the PostgreSQL database
+   - `FRONTEND_URL`: The public URL of the frontend application
+4. **Permissions**: Ensure the SSH user has permission to run Docker commands without sudo.
+
+### How to Use
+
+1. **Build and Push**: Every push to `main` will build and push the `latest` images. When you push a tag (e.g., `git tag v1.0.0 && git push origin v1.0.0`), it will build and push the images with the version tag and also create a release.
+2. **Deploy**: Go to the Actions tab in GitHub, select the "Deploy to Production" workflow, click "Run workflow", enter the tag to deploy (e.g., `v1.0.0`), and run.
+
+### Notes
+
+- The deployment workflow uses the `docker-compose.prod.yml` file from the repository. Make sure to update this file in the repository if you make changes to the production setup.
+- The deployment script will:
+   - Pull the new images
+   - Stop the existing containers
+   - Start the new containers
+   - Prune unused Docker objects to free space
 
 ## Production Server Setup
 
