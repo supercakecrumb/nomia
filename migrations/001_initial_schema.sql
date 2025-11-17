@@ -1,4 +1,4 @@
--- Affirm Name - Initial Schema Migration
+-- Nomia - Initial Schema Migration
 -- Version: 001
 -- Description: Create core tables with indexes for name data storage and querying
 -- Author: Architecture Team
@@ -154,7 +154,7 @@ VALUES
 -- ============================================================================
 
 -- Set UTF-8 encoding (should be set at database creation, but verify)
--- CREATE DATABASE affirm_name WITH ENCODING 'UTF8' LC_COLLATE='en_US.UTF-8' LC_CTYPE='en_US.UTF-8';
+-- CREATE DATABASE nomia WITH ENCODING 'UTF8' LC_COLLATE='en_US.UTF-8' LC_CTYPE='en_US.UTF-8';
 
 -- ============================================================================
 -- Performance Tuning Notes

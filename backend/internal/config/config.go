@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/spf13/viper"
-	"github.com/supercakecrumb/affirm-name/internal/db"
+	"github.com/supercakecrumb/nomia/internal/db"
 )
 
 // Config holds the application configuration
@@ -20,7 +20,7 @@ func Load() (*Config, error) {
 	// Set default values
 	viper.SetDefault("FIXTURE_MODE", false)
 	viper.SetDefault("PORT", "8080")
-	viper.SetDefault("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/affirm_name?sslmode=disable")
+	viper.SetDefault("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/nomia?sslmode=disable")
 	viper.SetDefault("FRONTEND_URL", "http://localhost:5173")
 	viper.SetDefault("LOG_LEVEL", "info")
 

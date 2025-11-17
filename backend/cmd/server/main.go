@@ -8,10 +8,10 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
-	"github.com/supercakecrumb/affirm-name/internal/config"
-	"github.com/supercakecrumb/affirm-name/internal/db"
-	"github.com/supercakecrumb/affirm-name/internal/handlers"
-	"github.com/supercakecrumb/affirm-name/internal/middleware"
+	"github.com/supercakecrumb/nomia/internal/config"
+	"github.com/supercakecrumb/nomia/internal/db"
+	"github.com/supercakecrumb/nomia/internal/handlers"
+	"github.com/supercakecrumb/nomia/internal/middleware"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

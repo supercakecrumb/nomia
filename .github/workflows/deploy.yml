@@ -22,7 +22,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /opt/affirm-name
+            cd /opt/nomia
             export TAG=${{ github.event.inputs.tag }}
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml down

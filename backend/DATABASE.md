@@ -19,10 +19,10 @@ docker-compose logs postgres
 ### 3. Access Database
 ```bash
 # Using psql from host (if installed)
-psql -h localhost -U postgres -d affirm_name
+psql -h localhost -U postgres -d nomia
 
 # Using psql from container
-docker-compose exec postgres psql -U postgres -d affirm_name
+docker-compose exec postgres psql -U postgres -d nomia
 ```
 
 ### 4. Stop Database
@@ -38,10 +38,10 @@ docker-compose down -v
 ## Database Connection
 - **Host**: localhost
 - **Port**: 5432
-- **Database**: affirm_name
+- **Database**: nomia
 - **User**: postgres
 - **Password**: postgres
-- **Connection String**: `postgresql://postgres:postgres@localhost:5432/affirm_name?sslmode=disable`
+- **Connection String**: `postgresql://postgres:postgres@localhost:5432/nomia?sslmode=disable`
 
 ## Data Persistence
 - Data is stored in Docker volume `postgres_data`

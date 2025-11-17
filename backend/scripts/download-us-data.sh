@@ -2,7 +2,7 @@
 set -e
 
 echo "========================================="
-echo "Affirm Name - US SSA Data Downloader"
+echo "Nomia - US SSA Data Downloader"
 echo "========================================="
 echo ""
 

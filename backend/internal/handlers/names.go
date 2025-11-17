@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/supercakecrumb/affirm-name/internal/config"
-	"github.com/supercakecrumb/affirm-name/internal/db"
+	"github.com/supercakecrumb/nomia/internal/config"
+	"github.com/supercakecrumb/nomia/internal/db"
 )
 
 // NamesList returns the list of names

@@ -17,7 +17,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: affirm_name_test
+          POSTGRES_DB: nomia_test
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -43,7 +43,7 @@ jobs:
       - name: Run migrations
         working-directory: ./backend
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/affirm_name_test?sslmode=disable
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/nomia_test?sslmode=disable
         run: |
           # Install migrate tool
           go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
@@ -53,7 +53,7 @@ jobs:
       - name: Run tests
         working-directory: ./backend
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/affirm_name_test?sslmode=disable
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/nomia_test?sslmode=disable
         run: go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
 
       - name: Check code formatting

@@ -1,4 +1,4 @@
--- Affirm Name - US Data Seed Migration
+-- Nomia - US Data Seed Migration
 -- Version: 002
 -- Description: Insert US country record for SSA name data
 -- Author: Data Team

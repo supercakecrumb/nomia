@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/supercakecrumb/affirm-name/internal/config"
+	"github.com/supercakecrumb/nomia/internal/config"
 )
 
 type HealthResponse struct {

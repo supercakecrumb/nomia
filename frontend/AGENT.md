@@ -1,12 +1,12 @@
-# AGENT.md - AI Assistant Guide for Affirm Name Project
+# AGENT.md - AI Assistant Guide for Nomia Project
 
-This guide is for AI assistants working with the human developer on the Affirm Name project. Read this carefully before starting work.
+This guide is for AI assistants working with the human developer on the Nomia project. Read this carefully before starting work.
 
 ---
 
 ## Project Overview
 
-**Affirm Name** is a name exploration app for trans/nonbinary users to discover gender-neutral names across different countries and time periods.
+**Nomia** is a name exploration app for trans/nonbinary users to discover gender-neutral names across different countries and time periods.
 
 **Mission:** Help people choose names that affirm their identity while navigating real-world legal/social systems.
 
@@ -17,7 +17,7 @@ This guide is for AI assistants working with the human developer on the Affirm N
 ## Project Structure
 
 ```
-affirm-name-frontend/
+nomia-frontend/
 ├── AGENT.md                    # This file
 ├── README.md                   # Project overview + status tracker
 ├── ARCHITECTURE.md             # Full system architecture

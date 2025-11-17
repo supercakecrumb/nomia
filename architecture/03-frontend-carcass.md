@@ -271,7 +271,7 @@ export function useMetaYears() {
 ### 2. Main / Motivation Page (`/`)
 
 **Responsibilities:**
-- Explain the mission and purpose of Affirm Name.
+- Explain the mission and purpose of Nomia.
 - Highlight trans/nonbinary focus.
 - Provide clear CTA to `/names`.
 

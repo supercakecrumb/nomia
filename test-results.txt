@@ -1,5 +1,5 @@
 =========================================
-Affirm Name Backend - API Tests
+Nomia Backend - API Tests
 Base URL: http://localhost:8083
 =========================================
 

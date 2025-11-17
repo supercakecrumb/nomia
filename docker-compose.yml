@@ -1,12 +1,12 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: affirm-name-db
+    container_name: nomia-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: affirm_name
+      POSTGRES_DB: nomia
     ports:
       - "5432:5432"
     volumes:

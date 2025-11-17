@@ -61,7 +61,7 @@ func main() {
 	// Get database URL from environment
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
-		databaseURL = "postgresql://postgres:postgres@localhost:5432/affirm_name?sslmode=disable"
+		databaseURL = "postgresql://postgres:postgres@localhost:5432/nomia?sslmode=disable"
 		if *verbose {
 			fmt.Println("⚠️  DATABASE_URL not set, using default:", databaseURL)
 		}

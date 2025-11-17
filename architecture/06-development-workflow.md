@@ -8,7 +8,7 @@ This chapter outlines the practical development workflow, testing strategies, an
 
 1. **Project Structure:**
 ```
-affirm-name-backend/
+nomia-backend/
 ├── cmd/
 │   └── server/
 │       └── main.go
@@ -25,7 +25,7 @@ affirm-name-backend/
 
 2. **Database Setup:**
    - Install PostgreSQL 14+.
-   - Create database: `affirm_name`.
+   - Create database: `nomia`.
    - Run migrations to create schema.
    - Enable `pg_trgm` extension.
 
@@ -43,7 +43,7 @@ affirm-name-backend/
 
 1. **Project Structure:**
 ```
-affirm-name-frontend/
+nomia-frontend/
 ├── src/
 │   ├── api/
 │   ├── components/

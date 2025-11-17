@@ -231,11 +231,11 @@ Retry-After: 60
 | Variable | Purpose | Example |
 |----------|---------|---------|
 | `FIXTURE_MODE` | Enable fixture mode | `true` / `false` |
-| `DATABASE_URL` | PostgreSQL connection string | `postgres://user:pass@localhost/affirm_name` |
+| `DATABASE_URL` | PostgreSQL connection string | `postgres://user:pass@localhost/nomia` |
 | `PORT` | HTTP server port | `8080` |
 | `STORAGE_PATH` | Dataset file storage path | `/var/data/datasets` |
 | `LOG_LEVEL` | Logging verbosity | `debug` / `info` / `warn` / `error` |
-| `CORS_ORIGINS` | Allowed CORS origins | `http://localhost:5173,https://affirm-name.com` |
+| `CORS_ORIGINS` | Allowed CORS origins | `http://localhost:5173,https://nomia.com` |
 | `RATE_LIMIT_REQUESTS` | Max requests per minute | `100` |
 | `RATE_LIMIT_WINDOW` | Rate limit window (seconds) | `60` |
 
@@ -472,7 +472,7 @@ export function LanguageSwitcher() {
 
 **Alternative Approaches (Future Consideration):**
 - **Path-based**: `/ru/names`, `/en/names` (better for SEO, requires route duplication)
-- **Subdomain**: `ru.affirm-name.com` (enterprise, requires infrastructure)
+- **Subdomain**: `ru.nomia.com` (enterprise, requires infrastructure)
 
 #### Locale-Aware Formatting
 
@@ -557,7 +557,7 @@ w.Header().Set("Content-Language", "en")
 
 **SQL Example:**
 ```sql
-CREATE DATABASE affirm_name
+CREATE DATABASE nomia
   ENCODING 'UTF8'
   LC_COLLATE 'en_US.UTF-8'
   LC_CTYPE 'en_US.UTF-8';

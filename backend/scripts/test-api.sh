@@ -1,12 +1,12 @@
 #!/bin/bash
-# Comprehensive API testing script for Affirm Name backend
+# Comprehensive API testing script for Nomia backend
 
 set -e
 
 BASE_URL="${1:-http://localhost:8083}"
 
 echo "========================================="
-echo "Affirm Name Backend - API Tests"
+echo "Nomia Backend - API Tests"
 echo "Base URL: $BASE_URL"
 echo "========================================="
 echo ""

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/supercakecrumb/affirm-name/internal/config"
+	"github.com/supercakecrumb/nomia/internal/config"
 )
 
 // MetaYears returns the list of available years

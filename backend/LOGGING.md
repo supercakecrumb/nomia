@@ -1,6 +1,6 @@
 # Logging Configuration Guide
 
-The Affirm Name backend uses [Zap](https://github.com/uber-go/zap) for structured logging with configurable log levels.
+The Nomia backend uses [Zap](https://github.com/uber-go/zap) for structured logging with configurable log levels.
 
 ## Quick Start
 

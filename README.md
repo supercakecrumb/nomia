@@ -1,8 +1,8 @@
-# Affirm Name
+# Nomia
 
 _Data-grounded name exploration for people who need their name to reflect who they are._
 
-> Affirm Name helps trans and nonbinary people (and anyone else) discover names that fit their culture, gender expression, and legal realities by combining official datasets into one search and analysis experience.
+> Nomia helps trans and nonbinary people (and anyone else) discover names that fit their culture, gender expression, and legal realities by combining official datasets into one search and analysis experience.
 
 ---
 
@@ -51,7 +51,7 @@ In many countries, name changes are constrained by gendered policy, cultural nor
 - **appear frequently enough** to be accepted without scrutiny, and
 - **do not require a simultaneous gender-marker change**.
 
-Affirm Name provides historical, data-backed context so people can evaluate:
+Nomia provides historical, data-backed context so people can evaluate:
 
 - gender distribution as a spectrum rather than a binary,
 - how names drift toward or away from a gender over time,
@@ -128,7 +128,7 @@ graph LR
 
 ## Long-Term Vision
 
-Affirm Name is evolving toward a comprehensive international resource that offers:
+Nomia is evolving toward a comprehensive international resource that offers:
 
 - gender-neutral and culturally grounded name exploration,
 - cross-language equivalence and canonical groupings,

@@ -145,7 +145,7 @@ export default function AppLayout() {
           <div className="pt-8 border-t border-gray-700">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-sm text-gray-400">
-                &copy; {new Date().getFullYear()} Affirm Name. All rights reserved.
+                &copy; {new Date().getFullYear()} Nomia. All rights reserved.
               </p>
               <div className="flex items-center gap-4 text-sm text-gray-400">
                 <span className="flex items-center gap-2">

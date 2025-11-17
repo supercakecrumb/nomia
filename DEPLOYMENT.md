@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This guide covers deploying the Affirm Name backend to production.
+This guide covers deploying the Nomia backend to production.
 
 ## Prerequisites
 
@@ -82,7 +82,7 @@ Configure the following secrets in your GitHub repository (Settings → Secrets 
 ### Production Server Setup for GitHub Actions Deployment
 
 1. **Docker and Docker Compose**: Ensure Docker and Docker Compose are installed on the server.
-2. **Directory Setup**: Create a directory for the project (e.g., `/opt/affirm-name`) and place the `docker-compose.prod.yml` file there.
+2. **Directory Setup**: Create a directory for the project (e.g., `/opt/nomia`) and place the `docker-compose.prod.yml` file there.
 3. **Environment Variables**: Create a `.env` file in the project directory with the required environment variables (see `backend/.env.example` for reference). At minimum, set:
    - `DB_PASSWORD`: A strong password for the PostgreSQL database
    - `FRONTEND_URL`: The public URL of the frontend application
@@ -114,8 +114,8 @@ sh get-docker.sh
 
 2. **Clone repository:**
 ```bash
-git clone https://github.com/your-org/affirm-name-backend.git
-cd affirm-name-backend
+git clone https://github.com/your-org/nomia-backend.git
+cd nomia-backend
 ```
 
 3. **Configure environment:**
@@ -150,7 +150,7 @@ railway up
 
 #### Heroku
 ```bash
-heroku create affirm-name-backend
+heroku create nomia-backend
 heroku addons:create heroku-postgresql:hobby-dev
 git push heroku main
 ```
@@ -167,10 +167,10 @@ fly deploy
 
 ```bash
 # Using migrate tool
-migrate -path migrations -database "postgresql://user:pass@host:5432/affirm_name?sslmode=disable" up
+migrate -path migrations -database "postgresql://user:pass@host:5432/nomia?sslmode=disable" up
 
 # Or connect to database container
-docker-compose -f docker-compose.prod.yml exec postgres psql -U postgres -d affirm_name
+docker-compose -f docker-compose.prod.yml exec postgres psql -U postgres -d nomia
 ```
 
 ### Import Initial Data
@@ -189,7 +189,7 @@ curl https://your-domain.com/health
 
 ### Database Status
 ```bash
-docker-compose -f docker-compose.prod.yml exec postgres psql -U postgres -d affirm_name -c "SELECT COUNT(*) FROM names;"
+docker-compose -f docker-compose.prod.yml exec postgres psql -U postgres -d nomia -c "SELECT COUNT(*) FROM names;"
 ```
 
 ### View Logs
@@ -205,12 +205,12 @@ docker-compose -f docker-compose.prod.yml logs -f postgres
 
 ### Backup Database
 ```bash
-docker-compose -f docker-compose.prod.yml exec postgres pg_dump -U postgres affirm_name > backup.sql
+docker-compose -f docker-compose.prod.yml exec postgres pg_dump -U postgres nomia > backup.sql
 ```
 
 ### Restore Database
 ```bash
-docker-compose -f docker-compose.prod.yml exec -T postgres psql -U postgres affirm_name < backup.sql
+docker-compose -f docker-compose.prod.yml exec -T postgres psql -U postgres nomia < backup.sql
 ```
 
 ## Scaling
@@ -273,5 +273,5 @@ docker-compose -f docker-compose.prod.yml up -d
 ## Support
 
 For deployment issues, check:
-- GitHub Issues: https://github.com/your-org/affirm-name-backend/issues
-- Documentation: https://github.com/your-org/affirm-name-backend/wiki
+- GitHub Issues: https://github.com/your-org/nomia-backend/issues
+- Documentation: https://github.com/your-org/nomia-backend/wiki

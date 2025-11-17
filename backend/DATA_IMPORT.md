@@ -1,6 +1,6 @@
 # Data Import Guide
 
-This guide explains how to import baby name data from various countries into the Affirm Name database.
+This guide explains how to import baby name data from various countries into the Nomia database.
 
 ## Quick Start
 
@@ -132,7 +132,7 @@ Run migrations to ensure countries exist:
 
 ```bash
 # Apply migration 003
-docker-compose exec postgres psql -U postgres -d affirm_name -f /migrations/003_seed_all_countries.sql
+docker-compose exec postgres psql -U postgres -d nomia -f /migrations/003_seed_all_countries.sql
 ```
 
 Or ensure countries are in database:
@@ -152,7 +152,7 @@ bash backend/scripts/import-us-data.sh all
 
 ```bash
 # Check imported data
-docker-compose exec -T postgres psql -U postgres -d affirm_name -c "
+docker-compose exec -T postgres psql -U postgres -d nomia -c "
 SELECT 
     c.name as country,
     MIN(n.year) as first_year,
@@ -231,10 +231,10 @@ For importing 100+ years of data:
 
 ```bash
 # Watch import progress in real-time
-watch -n 1 'docker-compose exec -T postgres psql -U postgres -d affirm_name -c "SELECT COUNT(*) FROM names;"'
+watch -n 1 'docker-compose exec -T postgres psql -U postgres -d nomia -c "SELECT COUNT(*) FROM names;"'
 
 # Check most recent imports
-docker-compose exec -T postgres psql -U postgres -d affirm_name -c "
+docker-compose exec -T postgres psql -U postgres -d nomia -c "
 SELECT year, COUNT(*) as records
 FROM names 
 GROUP BY year 
@@ -283,7 +283,7 @@ docker-compose ps
 docker-compose logs postgres
 
 # Test connection manually
-docker-compose exec postgres psql -U postgres -d affirm_name -c "SELECT 1;"
+docker-compose exec postgres psql -U postgres -d nomia -c "SELECT 1;"
 ```
 
 ### Year Range Issues
@@ -321,13 +321,13 @@ bash backend/scripts/download-us-data.sh
 docker-compose up -d
 
 # 3. Run migrations
-docker-compose exec postgres psql -U postgres -d affirm_name -c "\i /migrations/003_seed_all_countries.sql"
+docker-compose exec postgres psql -U postgres -d nomia -c "\i /migrations/003_seed_all_countries.sql"
 
 # 4. Import all data
 bash backend/scripts/import-us-data.sh all
 
 # 5. Verify
-docker-compose exec -T postgres psql -U postgres -d affirm_name -c "
+docker-compose exec -T postgres psql -U postgres -d nomia -c "
 SELECT COUNT(*) as total_records, 
        COUNT(DISTINCT year) as years, 
        COUNT(DISTINCT name) as unique_names 
@@ -361,7 +361,7 @@ go run cmd/import/main.go -country=US
 
 ```bash
 # First, delete existing data for that year
-docker-compose exec -T postgres psql -U postgres -d affirm_name -c "
+docker-compose exec -T postgres psql -U postgres -d nomia -c "
 DELETE FROM names WHERE year = 2023;
 DELETE FROM name_datasets WHERE year_from = 2023;
 "

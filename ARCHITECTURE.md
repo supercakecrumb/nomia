@@ -1,4 +1,4 @@
-# Affirm Name – Architecture Plan
+# Nomia – Architecture Plan
 
 **Version:** 1.0  
 **Last Updated:** 2025-11-15  
@@ -8,7 +8,7 @@
 
 ## About This Document
 
-This architecture plan defines the **scaffolding** for Affirm Name, a data-driven web application helping trans, nonbinary, and other users explore given names across countries, languages, and decades.
+This architecture plan defines the **scaffolding** for Nomia, a data-driven web application helping trans, nonbinary, and other users explore given names across countries, languages, and decades.
 
 The plan enables **parallel development** by establishing a stable contract that frontend and backend teams can implement against independently from day one.
 

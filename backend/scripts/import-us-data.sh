@@ -2,7 +2,7 @@
 set -e
 
 echo "========================================="
-echo "Affirm Name - US Data Import"
+echo "Nomia - US Data Import"
 echo "========================================="
 echo ""
 
@@ -14,7 +14,7 @@ fi
 
 # Ensure database is running
 echo "1. Checking database status..."
-if ! docker-compose ps | grep -q "affirm-name-db.*Up"; then
+if ! docker-compose ps | grep -q "nomia-db.*Up"; then
     echo "   Starting database..."
     docker-compose up -d
     echo "   Waiting for database to be ready..."
@@ -30,7 +30,7 @@ fi
 echo "   ✅ Database is ready"
 
 # Set DATABASE_URL environment variable
-export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/affirm_name?sslmode=disable"
+export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/nomia?sslmode=disable"
 
 # Run the import tool
 echo ""
@@ -66,7 +66,7 @@ go run cmd/import/main.go $IMPORT_ARGS
 echo ""
 echo "4. Import complete! Database statistics:"
 echo ""
-docker-compose exec -T postgres psql -U postgres -d affirm_name -c "
+docker-compose exec -T postgres psql -U postgres -d nomia -c "
 SELECT 
     c.name as country,
     COUNT(DISTINCT n.year) as years,
@@ -83,7 +83,7 @@ ORDER BY c.name;
 
 echo ""
 echo "Year-by-year breakdown:"
-docker-compose exec -T postgres psql -U postgres -d affirm_name -c "
+docker-compose exec -T postgres psql -U postgres -d nomia -c "
 SELECT 
     n.year,
     COUNT(*) as total_names,

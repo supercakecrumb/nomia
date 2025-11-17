@@ -1,10 +1,10 @@
-# AI Agent Guide for Affirm Name Backend
+# AI Agent Guide for Nomia Backend
 
-This document helps AI agents quickly understand the Affirm Name backend project and work effectively with it.
+This document helps AI agents quickly understand the Nomia backend project and work effectively with it.
 
 ## 🎯 Project Overview
 
-**What is Affirm Name?**
+**What is Nomia?**
 A REST API that serves historical baby name data from multiple countries, enabling users to explore naming trends, gender balance, and popularity over time.
 
 **Current Status:** Production-ready with 144 years of US data (1880-2024), 102K unique names, 370M+ occurrences
@@ -20,7 +20,7 @@ A REST API that serves historical baby name data from multiple countries, enabli
 ## 📁 Project Structure
 
 ```
-affirm-name-backend/
+nomia-backend/
 ├── backend/                    # Main Go application
 │   ├── cmd/
 │   │   ├── server/main.go     # HTTP server entry point
@@ -80,7 +80,7 @@ affirm-name-backend/
 docker-compose ps
 
 # Check database contents
-docker-compose exec postgres psql -U postgres -d affirm_name -c "
+docker-compose exec postgres psql -U postgres -d nomia -c "
 SELECT 
     COUNT(DISTINCT year) as years,
     COUNT(DISTINCT name) as unique_names,
@@ -390,7 +390,7 @@ go run cmd/import/main.go -country=XX -dir=/path/to/data
 1. **Create migration** in `migrations/00X_description.sql`
 2. **Run migration**:
 ```bash
-docker-compose exec postgres psql -U postgres -d affirm_name -f /docker-entrypoint-initdb.d/00X_description.sql
+docker-compose exec postgres psql -U postgres -d nomia -f /docker-entrypoint-initdb.d/00X_description.sql
 ```
 3. **Update Go structs** in `internal/db/queries.go`
 4. **Update queries** to include new fields

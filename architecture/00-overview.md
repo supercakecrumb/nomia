@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the **architectural scaffolding** for Affirm Name—a data-driven web application helping trans, nonbinary, and other users explore given names across countries, languages, and decades to find names that fit their gender identity, cultural background, and legal realities.
+This document defines the **architectural scaffolding** for Nomia—a data-driven web application helping trans, nonbinary, and other users explore given names across countries, languages, and decades to find names that fit their gender identity, cultural background, and legal realities.
 
 ## Goals
 
@@ -22,7 +22,7 @@ The architecture enables:
 
 ## Technology Stack
 
-This section defines the specific versions and tools used in the Affirm Name project as of 2025-11-16. These versions represent a **modern but conservative** approach: current stable releases that align with ecosystem directions while keeping the stack lean for future maintainability.
+This section defines the specific versions and tools used in the Nomia project as of 2025-11-16. These versions represent a **modern but conservative** approach: current stable releases that align with ecosystem directions while keeping the stack lean for future maintainability.
 
 ### Backend Stack (Go)
 
