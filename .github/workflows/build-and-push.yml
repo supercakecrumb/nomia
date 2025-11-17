@@ -40,7 +40,8 @@ jobs:
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
+          context: .
+          file: ./frontend/Dockerfile
           push: true
           tags: |
             ghcr.io/supercakecrumb/nomia/frontend:latest
