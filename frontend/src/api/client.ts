@@ -25,7 +25,10 @@ import {
 
 // API configuration from environment variables
 const API_MODE = import.meta.env.VITE_API_MODE || 'mock';
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+// Use window.location.origin as default to automatically detect the current domain
+// This works for both development (with proxy) and production
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ||
+  (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8000');
 const MOCK_DELAY_MS = 200;
 
 /**
