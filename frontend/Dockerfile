@@ -13,6 +13,10 @@ RUN npm install
 COPY frontend/ ./
 COPY spec-examples/ ../spec-examples/
 
+# Use production environment configuration
+COPY frontend/.env.production .env.production
+ENV NODE_ENV=production
+
 # Build the application
 RUN npm run build
 
