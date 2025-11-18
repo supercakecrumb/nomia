@@ -1,46 +1,67 @@
-version: '3.8'
-
 services:
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: ghcr.io/supercakecrumb/nomia/backend:${BACKEND_TAG:-latest}
     container_name: nomia-backend
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "127.0.0.1:9090:8080"  # Map external 9090 to internal 8080
     environment:
       - FIXTURE_MODE=false
       - PORT=8080
-      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD:-postgres}@postgres:5432/nomia?sslmode=disable
-      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
+      - LOG_LEVEL=info
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD}@postgres:5432/nomia?sslmode=disable
+      - FRONTEND_URL=https://nomia.vkiel.com
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - nomia-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    image: ghcr.io/supercakecrumb/nomia/frontend:${FRONTEND_TAG:-latest}
+    container_name: nomia-frontend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:80"  # Internal only, served via Nginx
+    networks:
+      - nomia-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   postgres:
     image: postgres:16-alpine
-    container_name: nomia-db-prod
+    container_name: nomia-postgres
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:5433:5432"
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: nomia
     volumes:
-      - postgres_data_prod:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
       - ./migrations:/docker-entrypoint-initdb.d:ro
+      - ./backups:/backups
+    networks:
+      - nomia-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - nomia-network
+    # Note: Do NOT expose 5432 to host in production for security
 
 volumes:
-  postgres_data_prod:
+  postgres_data:
     driver: local
 
 networks:
