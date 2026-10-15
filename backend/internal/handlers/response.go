@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -24,7 +25,10 @@ func LoadFixture(path string) ([]byte, error) {
 
 // WriteError writes an error response in JSON format
 func WriteError(w http.ResponseWriter, status int, message string) {
+	if status >= http.StatusInternalServerError {
+		message = "Internal server error"
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	fmt.Fprintf(w, `{"error": "%s"}`, message)
+	json.NewEncoder(w).Encode(map[string]string{"error": message})
 }
