@@ -40,7 +40,6 @@ func Logger(logger *zap.Logger) func(next http.Handler) http.Handler {
 			logger.Info("HTTP request",
 				zap.String("method", r.Method),
 				zap.String("path", r.URL.Path),
-				zap.String("query", r.URL.RawQuery),
 				zap.Int("status", wrapped.statusCode),
 				zap.Duration("duration", duration),
 			)

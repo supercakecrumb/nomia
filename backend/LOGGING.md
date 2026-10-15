@@ -331,3 +331,7 @@ path:/api/meta/years
 - [Zap Documentation](https://pkg.go.dev/go.uber.org/zap)
 - [Zap Best Practices](https://github.com/uber-go/zap#faq)
 - [Structured Logging](https://www.honeycomb.io/blog/structured-logging-and-your-team)
+## Privacy
+
+Request logs omit query values. Public 5xx responses use a generic message
+without database or filesystem details.
